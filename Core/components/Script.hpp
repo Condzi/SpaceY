@@ -28,7 +28,7 @@ namespace con
 	struct ScriptComponent :
 		Component
 	{
-		Context* context = nullptr;
+		Context context;
 
 		virtual void OnKill() {}
 

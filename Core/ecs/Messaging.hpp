@@ -10,10 +10,10 @@
 #include <memory>
 #include <vector>
 
+#include <Core/ecs/Config.hpp>
+
 namespace con
 {
-	using messageID_t = int8_t;
-
 	namespace internal
 	{
 		struct messageInterface_t

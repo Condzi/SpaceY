@@ -11,6 +11,7 @@ namespace con
 	typedef int16_t stateID_t;
 	typedef int8_t resourcePriorityID_t;
 	typedef int8_t resourceID_t;
+	typedef const char* cstr_t;
 }
 
 // IDEA: Maybe move this macro to Macros.hpp? Along with Assertions.

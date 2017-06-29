@@ -29,7 +29,7 @@ namespace con
 		sf::Sprite* spriteToRender = nullptr;
 		sf::Text* textToDraw = nullptr;
 
-		void Init()
+		void Init() override
 		{
 			// Try to set sprite. If DrawableTextScript is added before DrawableComponent we are accepting it to fail.
 			this->setSpriteToRender( false );
@@ -55,6 +55,7 @@ namespace con
 			this->texture.draw( *this->textToDraw );
 			this->texture.display();
 
+			// POSSIBLE_ERROR: Maybe use here that magic offset formula for text bounds from prototype code
 			this->spriteToRender->setTextureRect( { 0,0, static_cast<int>( this->textToDraw->getGlobalBounds().width ), static_cast<int>( this->textToDraw->getGlobalBounds().height * 2 ) } );
 			this->spriteToRender->setTexture( this->texture.getTexture() );
 		}

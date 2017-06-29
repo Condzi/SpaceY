@@ -19,6 +19,6 @@ namespace con
 	struct EntityTagComponent final :
 		Component
 	{
-		uint8_t tag = 0;
+		entityID_t tag = 0;
 	};
 }

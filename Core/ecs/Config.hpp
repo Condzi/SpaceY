@@ -24,4 +24,6 @@ namespace con
 	typedef uint8_t systemID_t;
 	typedef uint8_t entityID_t;
 	typedef uint8_t groupID_t;
+
+	typedef int8_t messageID_t;
 }

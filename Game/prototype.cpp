@@ -43,13 +43,13 @@ void init()
 void workInit()
 {
 	sampleText.setFont( font );
-	sampleText.setString( "abc_ABC-321\nhello!\nWARNING?\nError?" );
+	sampleText.setString( "abc_ABC-321" );
 	sampleText.setPosition( 100, 100 );
 	sampleText.setFillColor( sf::Color::Red );
-	sampleText.setCharacterSize( 100 );
+	sampleText.setCharacterSize( 50 );
 
 	// magic offset ??
-	testRectangle.setPosition( sampleText.getPosition().x, sampleText.getPosition().y + ( sampleText.getCharacterSize() * 15.3f ) / 50.0f );
+	testRectangle.setPosition( sampleText.getPosition().x + ( sampleText.getCharacterSize() * 3 ) / 50.0f, sampleText.getPosition().y + ( sampleText.getCharacterSize() * 15.3f ) / 50.0f );
 	//testRectangle.setSize( GetLocalSize( sampleText ) );
 	testRectangle.setSize( { sampleText.getGlobalBounds().width, sampleText.getGlobalBounds().height } );
 }

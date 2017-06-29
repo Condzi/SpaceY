@@ -9,23 +9,28 @@ sf::Font font;
 sf::RenderWindow window;
 sf::Event event;
 
+sf::Text sampleText;
+sf::RectangleShape testRectangle;
+
+
 void init();
+void workInit();
 void pollEvent();
-void update();
+void workUpdate();
+void workDraw();
 void draw();
 
 int main()
 {
 	init();
+	workInit();
 
 	while ( window.isOpen() )
 	{
 		pollEvent();
-		update();
+		workUpdate();
 		draw();
 	}
-
-	return 0;
 }
 
 void init()
@@ -35,6 +40,20 @@ void init()
 	font.loadFromFile( "consolas.ttf" );
 }
 
+void workInit()
+{
+	sampleText.setFont( font );
+	sampleText.setString( "abc_ABC-321\nhello!\nWARNING?\nError?" );
+	sampleText.setPosition( 100, 100 );
+	sampleText.setFillColor( sf::Color::Red );
+	sampleText.setCharacterSize( 100 );
+
+	// magic offset ??
+	testRectangle.setPosition( sampleText.getPosition().x, sampleText.getPosition().y + ( sampleText.getCharacterSize() * 15.3f ) / 50.0f );
+	//testRectangle.setSize( GetLocalSize( sampleText ) );
+	testRectangle.setSize( { sampleText.getGlobalBounds().width, sampleText.getGlobalBounds().height } );
+}
+
 void pollEvent()
 {
 	while ( window.pollEvent( event ) )
@@ -42,13 +61,20 @@ void pollEvent()
 			window.close();
 }
 
-void update()
+void workUpdate()
 {
 
+}
+
+void workDraw()
+{
+	window.draw( testRectangle );
+	window.draw( sampleText );
 }
 
 void draw()
 {
 	window.clear();
+	workDraw();
 	window.display();
 }

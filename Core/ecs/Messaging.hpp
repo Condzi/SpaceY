@@ -19,6 +19,7 @@ namespace con
 		struct messageInterface_t
 		{
 			messageID_t id = 0;
+			const size_t uniqueID;
 			virtual ~messageInterface_t() {}
 		};
 	}
@@ -26,7 +27,9 @@ namespace con
 	/*
 	===============================================================================
 	Created by: Condzi
-		Non-inheritable struct that contains message id and data of type T.
+		Non-inheritable struct that contains message id and data of type T. It
+		also contains constant uniqueID to distinguish messages (unique for current
+		frame).
 
 	===============================================================================
 	*/
@@ -36,8 +39,9 @@ namespace con
 	{
 		T data;
 
-		message_t( messageID_t _id, T _data ) :
-			id( _id ), data( std::move( _data ) )
+		message_t( messageID_t _id, T _data, size_t _uniqueID ) :
+			id( _id ), data( std::move( _data ) ),
+			uniqueID( std::move( _uniqueID ) )
 		{}
 	};
 
@@ -55,15 +59,28 @@ namespace con
 		template <typename T>
 		void AddMessage( const messageID_t id, const T& data )
 		{
-			this->messages.emplace_back( std::make_unique<message_t<T>>( id, data ) );
+			this->messages.emplace_back( std::make_unique<message_t<T>>( id, data, this->messages.size() ) );
 		}
 		template <typename T>
-		message_t<T>& GetMessage( const messageID_t id )
+		message_t<T>& GetUniqueMessage( const messageID_t id )
 		{
 			auto result = this->findMessage( id );
 			if ( result != this->messages.end() )
 				return static_cast<message_t<T>&>( ( *result ).get() );
 		}
+		template <typename T>
+		std::vector<message_t<T>*> GetAllMessages( const messageID_t id )
+		{
+			std::vector<message_t<T>*> vec;
+			vec.reserve( this->messages.size() );
+
+			for ( auto& message : this->messages )
+				if ( message->id == id )
+					vec.push_back( static_cast<message_t<T>*>( ( *result ).get() ) );
+
+			return vec;
+		}
+
 		void ClearMessages()
 		{
 			this->messages.clear();

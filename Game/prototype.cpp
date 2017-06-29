@@ -3,6 +3,7 @@
 	https://github.com/condzi
 */
 
+#if 0
 #include <SFML/Graphics.hpp>
 
 sf::Font font;
@@ -78,3 +79,4 @@ void draw()
 	workDraw();
 	window.display();
 }
+#endif 

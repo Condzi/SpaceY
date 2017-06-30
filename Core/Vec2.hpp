@@ -45,7 +45,11 @@ namespace con
 			y( std::move( static_cast<T>( yy ) ) )
 		{}
 		template <typename Y>
-		Vec2( Vec2<Y> second ) :
+		Vec2( const Vec2<Y> second ) :
+			x( std::move( static_cast<T>( second.x ) ) ),
+			y( std::move( static_cast<T>( second.y ) ) )
+		{}
+		Vec2( const sf::Vector2<T> second ) :
 			x( std::move( static_cast<T>( second.x ) ) ),
 			y( std::move( static_cast<T>( second.y ) ) )
 		{}
@@ -61,6 +65,10 @@ namespace con
 		void Set( const Vec2<T>& second )
 		{
 			*this = second;
+		}
+		void Set( const sf::Vector2<T>& second )
+		{
+			this->Set( second.x, second.y );
 		}
 
 		sf::Vector2<T> AsSFMLVec() const;

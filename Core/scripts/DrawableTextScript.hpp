@@ -12,6 +12,8 @@
 #include <Core/components/Drawable.hpp>
 #include <Core/ecs/Entity.hpp>
 
+#include <Core/Config.hpp>
+
 namespace con
 {
 	/*
@@ -51,13 +53,12 @@ namespace con
 			this->previousText = this->textToDraw->getString();
 
 			this->texture.create( static_cast<uint32_t>( this->textToDraw->getGlobalBounds().width ), static_cast<uint32_t>( this->textToDraw->getGlobalBounds().height * 2 ) );
+			this->textToDraw->setPosition( 0, 0 );
 			this->texture.clear( sf::Color::Transparent );
 			this->texture.draw( *this->textToDraw );
 			this->texture.display();
 
-			// POSSIBLE_ERROR: Maybe use here that magic offset formula for text bounds from prototype code
-			this->spriteToRender->setTextureRect( { 0,0, static_cast<int>( this->textToDraw->getGlobalBounds().width ), static_cast<int>( this->textToDraw->getGlobalBounds().height * 2 ) } );
-			this->spriteToRender->setTexture( this->texture.getTexture() );
+			this->spriteToRender->setTexture( this->texture.getTexture(), true );
 		}
 
 	private:

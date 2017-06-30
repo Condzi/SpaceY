@@ -8,6 +8,7 @@
 #include <Core/state/Game.hpp>
 
 #include <Game/states/LoadingScreen.hpp>
+#include <Game/states/PlayConsole.hpp>
 
 using namespace con;
 
@@ -25,6 +26,7 @@ int main()
 		{
 			Game game( "settings.ini" );
 			game.RegisterState<LoadingScreenState>( STATE_LOADING_SCREEN );
+			game.RegisterState<PlayConsoleState>( STATE_PLAY_CONSOLE );
 
 			game.Run( STATE_LOADING_SCREEN );
 		}

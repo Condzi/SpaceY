@@ -11,6 +11,7 @@
 #include <Core/Settings.hpp>
 
 #include <Game/Enums.hpp>
+#include <Game/scripts/console/ConsoleScript.hpp>
 
 namespace con
 {
@@ -28,6 +29,22 @@ namespace con
 			entity.AddComponent<DrawableComponent>().drawLayer = LAYER_TEXT;
 			entity.AddComponent<EntityTagComponent>().tag = ENTITY_TEXT_CONSOLE;
 			entity.AddScriptComponent<DrawableTextScript>( context );
+			entity.AddGroup( GROUP_PLAY_STATE_CONSOLE );
+		}
+	};
+
+	struct ConsoleCreator final :
+		EntityCreator
+	{
+		entityID_t GetID() const override
+		{
+			return ENTITY_CONSOLE;
+		}
+
+		void CreateEntity( Entity& entity, Context& context )
+		{
+			entity.AddComponent<EntityTagComponent>().tag = ENTITY_TEXT_CONSOLE;
+			entity.AddScriptComponent<ConsoleScript>( context );
 			entity.AddGroup( GROUP_PLAY_STATE_CONSOLE );
 		}
 	};

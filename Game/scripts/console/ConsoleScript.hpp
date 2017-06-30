@@ -22,59 +22,84 @@ namespace con
 	struct ConsoleScript :
 		ScriptComponent
 	{
-		typedef message_t<cstr_t> logMessage_t;
-		typedef message_t<int32_t> scrollMessage_t;
+		typedef Message<cstr_t> logMessage_t;
+		typedef Message<int32_t> scrollMessage_t;
+
+		std::array<sf::Text*, CONSOLE_VIEW_BUFFER> logsToDraw;
 
 		void Init() override
 		{
-			this->logOnTop = CONSOLE_VIEW_BUFFER;
-			this->logs[0] = "SYSTEM_INIT";
+			this->logOnTop = CONSOLE_VIEW_BUFFER - 1;
 		}
 
 		void Update() override
 		{
 			auto& messenger = *this->context.messenger;
 			auto logsToAdd = messenger.GetAllMessages<cstr_t>( MESSAGE_CONSOLE_ADD_LOG );
-			auto scrollsUp = messenger.GetAllMessages<int32_t>( MESSAGE_CONSOLE_SCROLL_UP );
-			auto scrollsDown = messenger.GetAllMessages<int32_t>( MESSAGE_CONSOLE_SCROLL_DOWN );
+			auto scrollUp = messenger.GetUniqueMessage<int32_t>( MESSAGE_CONSOLE_SCROLL_UP );
+			auto scrollDown = messenger.GetUniqueMessage<int32_t>( MESSAGE_CONSOLE_SCROLL_DOWN );
 
+			bool logsNeedUpdate = false;
 			if ( !logsToAdd.empty() )
+			{
 				this->handleLogAdd( std::move( logsToAdd ) );
-			if ( !scrollsUp.empty() || scrollsDown.empty() )
-				this->handleScrolls( std::move( scrollsUp ), std::move( scrollsDown ) );
+				logsNeedUpdate = true;
+			}
+			if ( scrollUp || scrollDown )
+			{
+				this->handleScrolls( scrollUp, scrollDown );
+				logsNeedUpdate = true;
+			}
+
+			//if ( logsNeedUpdate )
+			this->updateLogsToDraw();
 		}
 
 	private:
 		std::array<cstr_t, CONSOLE_CAPACITY> logs;
-		std::array<sf::Text*, CONSOLE_VIEW_BUFFER> logsToDraw;
 		// If we have id of log on top we can easly calculate interval of logs to draw.
 		uint8_t logOnTop;
 
-		void handleLogAdd( const std::vector<logMessage_t*>& logsToAdd )
+		void handleLogAdd( std::vector<logMessage_t*>& logsToAdd )
 		{
 			// Shift the array.
 			std::rotate( this->logs.rbegin(), this->logs.rbegin() + logsToAdd.size(), this->logs.rend() );
 
 			CON_ASSERT( logsToAdd.size() < CONSOLE_CAPACITY, "Console buffer overflow" );
 			for ( uint8_t i = 0; i < logsToAdd.size(); i++ )
+			{
 				this->logs[i] = logsToAdd[i]->data;
+				logsToAdd[i]->safeDelete = true;
+			}
 		}
 
-		void handleScrolls( const std::vector<scrollMessage_t*>& up, const std::vector<scrollMessage_t*>& down )
+		void handleScrolls( scrollMessage_t* up, scrollMessage_t* down )
 		{
-			int16_t finalOffset = 0;
-			for ( auto upVal : up )
-				finalOffset += upVal->data;
-			for ( auto downVal : down )
-				finalOffset += downVal->data;
+			int8_t finalOffset = 0;
+			if ( up )
+			{
+				finalOffset -= 1;
+				up->safeDelete = true;
+			}
+			if ( down )
+			{
+				finalOffset += 1;
+				down->safeDelete = true;
+			}
 
-			int16_t offsetResult = finalOffset + this->logOnTop;
-			if ( offsetResult <= 0 )
-				this->logOnTop = 0 + CONSOLE_VIEW_BUFFER;
-			else if ( offsetResult >= CONSOLE_CAPACITY )
-				this->logOnTop = CONSOLE_CAPACITY;
-				
-			this->logOnTop += finalOffset;
+			int8_t offsetResult = this->logOnTop + finalOffset;
+			if ( offsetResult <= CONSOLE_VIEW_BUFFER - 1 )
+				this->logOnTop = CONSOLE_VIEW_BUFFER - 1;
+			else if ( offsetResult >= CONSOLE_CAPACITY - 1 )
+				this->logOnTop = CONSOLE_CAPACITY - 1;
+			else
+				this->logOnTop += finalOffset;
+		}
+
+		void updateLogsToDraw()
+		{
+			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
+				logsToDraw[i]->setString( logs[this->logOnTop - i] );
 		}
 	};
 }

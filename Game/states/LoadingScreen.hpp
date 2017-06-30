@@ -8,6 +8,7 @@
 #include <Core/resourceManaging/ResourceHolder.hpp>
 #include <Core/state/State.hpp>
 #include <Core/ecs/Entity.hpp>
+#include <Core/ecs/EntityFactory.hpp>
 #include <Core/components/Drawable.hpp>
 #include <Core/components/Position.hpp>
 
@@ -55,7 +56,7 @@ namespace con
 		bool resourcesLoaded = false;
 		void loadTextures()
 		{
-			auto& cache = this->context.resourceCache;
+			auto& cache = *this->context.resourceCache;
 
 			/*
 			cache->textures.emplace_back( std::make_unique<textureResource_t>( RESOURCE_MULTISTATE, TEXTURE_SHEET_PLACEHOLDER ) );
@@ -83,7 +84,10 @@ namespace con
 
 		void registerEntityCreators()
 		{
-			auto entityFactory = this->context.entityFactory;
+			auto& entityFactory = *this->context.entityFactory;
+
+			entityFactory.AddCreator<TextConsoleCreator>();
+			entityFactory.AddCreator<ConsoleCreator>();
 		}
 	};
 }

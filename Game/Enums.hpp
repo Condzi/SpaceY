@@ -44,14 +44,7 @@ namespace con
 
 		FONT_CONSOLAS,
 
-		TEXT_CONSOLE_8,
-		TEXT_CONSOLE_7,
-		TEXT_CONSOLE_6,
-		TEXT_CONSOLE_5,
-		TEXT_CONSOLE_4,
-		TEXT_CONSOLE_3,
-		TEXT_CONSOLE_2,
-		TEXT_CONSOLE_1
+		TEXT_CONSOLE_LINE
 	};
 
 	enum resourcePriority_t : resourcePriorityID_t

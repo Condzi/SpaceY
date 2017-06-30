@@ -113,7 +113,7 @@ namespace con
 
 			rawPtr->entity = this;
 
-			reinterpret_cast<T*>( rawPtr )->context = &context;
+			reinterpret_cast<T*>( rawPtr )->context = context;
 			rawPtr->Init();
 			return *reinterpret_cast<T*>( rawPtr );
 		}

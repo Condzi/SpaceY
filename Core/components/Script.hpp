@@ -5,13 +5,14 @@
 
 #pragma once
 
+// For Context structure.
+#include <Core/state/State.hpp>
 #include <Core/ecs/Component.hpp>
 #include <Core/Config.hpp>
 
 namespace con
 {
 	// Forward declarations.
-	struct Context;
 	struct SimpleBodyComponent;
 	enum collisionSide_t : uint8_t;
 

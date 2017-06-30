@@ -63,7 +63,7 @@ namespace con
 
 			Vec2f prevPos = positionStart;
 			float textHeight = 0;
-			std::for_each( consoleScript.logsToDraw.begin(), consoleScript.logsToDraw.end(), [&]( auto& text )
+			for(auto& text : consoleScript.logsToDraw )
 			{
 				textCache.emplace_back( std::make_unique<uiTextResource_t>( RESOURCE_PLAY_CONSOLE, TEXT_CONSOLE_LINE ) );
 				text = textCache.back().get();
@@ -82,8 +82,7 @@ namespace con
 				textEntity.GetComponent<DrawableTextScript>().textToDraw = text;
 				textEntity.GetComponent<PositionComponent>().x = prevPos.x;
 				textEntity.GetComponent<PositionComponent>().y = prevPos.y;
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"LOOL" );
-			} );
+			}
 		}
 	};
 }

@@ -63,7 +63,7 @@ namespace con
 
 			Vec2f prevPos = positionStart;
 			float textHeight = 0;
-			std::for_each( consoleScript.logsToDraw.rbegin(), consoleScript.logsToDraw.rend(), [&]( auto& text )
+			std::for_each( consoleScript.logsToDraw.begin(), consoleScript.logsToDraw.end(), [&]( auto& text )
 			{
 				textCache.emplace_back( std::make_unique<uiTextResource_t>( RESOURCE_PLAY_CONSOLE, TEXT_CONSOLE_LINE ) );
 				text = textCache.back().get();

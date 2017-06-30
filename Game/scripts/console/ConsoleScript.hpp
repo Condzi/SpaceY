@@ -78,12 +78,12 @@ namespace con
 			int8_t finalOffset = 0;
 			if ( up )
 			{
-				finalOffset -= 1;
+				finalOffset += 1;
 				up->safeDelete = true;
 			}
 			if ( down )
 			{
-				finalOffset += 1;
+				finalOffset -= 1;
 				down->safeDelete = true;
 			}
 

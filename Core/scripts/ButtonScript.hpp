@@ -10,7 +10,7 @@
 #include <Core/components/Script.hpp>
 #include <Core/components/Drawable.hpp>
 #include <Core/ecs/Entity.hpp>
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 
 namespace con
 {

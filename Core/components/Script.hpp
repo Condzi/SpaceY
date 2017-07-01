@@ -5,10 +5,9 @@
 
 #pragma once
 
-// For Context structure.
-#include <Core/state/State.hpp>
 #include <Core/ecs/Component.hpp>
 #include <Core/Config.hpp>
+#include <Core/Context.hpp>
 
 namespace con
 {

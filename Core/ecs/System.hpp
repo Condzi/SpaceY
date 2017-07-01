@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 #include <Core/ecs/Config.hpp>
 
 namespace con

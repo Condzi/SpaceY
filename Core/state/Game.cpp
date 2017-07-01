@@ -8,8 +8,7 @@
 namespace con
 {
 	Game::Game( std::string settPath ) :
-		settingsPath( std::move( settPath ) ),
-		context( this )
+		settingsPath( std::move( settPath ) )
 	{
 		LOG( "Game ctor; application start", INFO, BOTH );
 		this->assignContextPointers();

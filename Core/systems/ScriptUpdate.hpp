@@ -8,8 +8,7 @@
 #include <Core/ecs/System.hpp>
 #include <Core/ecs/Functions.hpp>
 #include <Core/components/Script.hpp>
-// For Context structure.
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 #include <Core/ecs/EntityManager.hpp>
 
 namespace con

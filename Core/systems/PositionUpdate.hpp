@@ -11,7 +11,7 @@
 #include <Core/components/Position.hpp>
 #include <Core/components/Drawable.hpp>
 #include <Core/components/SimpleBody.hpp>
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 
 namespace con
 {

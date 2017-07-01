@@ -1,6 +1,6 @@
-#include <Core/state/State.hpp>
 #include <Core/ecs/EntityManager.hpp>
 #include <Core/Vec2.hpp>
+#include <Core/Context.hpp>
 #include <Core/systems/Renderer.hpp>
 
 namespace con

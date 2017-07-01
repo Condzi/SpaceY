@@ -7,43 +7,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include <Core/Assert.hpp>
-#include <Core/logger/Logger.hpp>
 #include <Core/Config.hpp>
+#include <Core/Context.hpp>
+#include <Core/logger/Logger.hpp>
 
 namespace con
 {
-	// Forward declaration.
-	class EntityManager;
-	struct ResourceHolder;
-	class Settings;
-	class Game;
-	class EntityFactory;
-	class StateStack;
-	class Messenger;
-
-	/*
-	===============================================================================
-	Created by: Condzi
-		Special structure that gives you acces to core objects: window, entityManager,
-		resourceCache, settings, entityFactory, stateStack and game. Most
-		of them requiers to include it's file (e.g resourceCache requiers to use
-		include <Core/resourceManaging/ResourceHolder.hpp>).
-
-	===============================================================================
-	*/
-	struct Context final
-	{
-		explicit Context( Game* g = nullptr );
-		sf::RenderWindow* window = nullptr;
-		EntityManager* entityManager = nullptr;
-		ResourceHolder* resourceCache = nullptr;
-		Settings* settings = nullptr;
-		EntityFactory* entityFactory = nullptr;
-		StateStack* stateStack = nullptr;
-		Messenger* messenger = nullptr;
-		Game* game;
-	};
-
 	/*
 	===============================================================================
 	Created by: Condzi

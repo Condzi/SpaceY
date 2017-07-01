@@ -1,12 +1,7 @@
-#include <Core/state/State.hpp>
 #include <Core/state/StateStack.hpp>
 
 namespace con
 {
-	Context::Context( Game* g ) :
-		game( g )
-	{}
-
 	void State::StartThread()
 	{
 		if ( this->threadRunning )

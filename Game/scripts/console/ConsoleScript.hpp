@@ -10,8 +10,7 @@
 
 #include <Core/components/Script.hpp>
 #include <Core/resourceManaging/ResourceHolder.hpp>
-// For context structure.
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 #include <Core/ecs/Messaging.hpp>
 
 #include <Game/Enums.hpp>
@@ -51,8 +50,8 @@ namespace con
 				logsNeedUpdate = true;
 			}
 
-			//if ( logsNeedUpdate )
-			this->updateLogsToDraw();
+			if ( logsNeedUpdate )
+				this->updateLogsToDraw();
 		}
 
 	private:

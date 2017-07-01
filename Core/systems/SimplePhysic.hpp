@@ -12,8 +12,7 @@
 #include <Core/physic/Manifold.hpp>
 // FRAME_TIME
 #include <Core/time/Time.hpp>
-// Context structure.
-#include <Core/state/State.hpp>
+#include <Core/Context.hpp>
 #include <Core/Settings.hpp>
 
 namespace con

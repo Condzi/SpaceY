@@ -9,6 +9,10 @@
 
 namespace con
 {
-	constexpr uint8_t CONSOLE_CAPACITY = 32;
-	constexpr uint8_t CONSOLE_VIEW_BUFFER = 8;
+	constexpr uint8_t CONSOLE_CAPACITY = 48;
+	constexpr uint8_t CONSOLE_VIEW_BUFFER = 16;
+	constexpr uint8_t CONSOLE_TEXT_SIZE = 60;
+	// IDEA: Move this values to settings ^
+	// Will broke if DESIGNED_X change.
+	constexpr uint16_t CONSOLE_MAX_TEXT_WIDTH = 1200;
 }

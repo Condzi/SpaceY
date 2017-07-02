@@ -33,7 +33,7 @@ namespace con
 
 			auto& console = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 
-			this->addTexts( { 200.0f, 200.0f }, 50, console.GetComponent<ConsoleScript>() );
+			this->addTexts( console.GetComponent<ConsoleScript>() );
 		}
 
 		void OnPop() override
@@ -47,36 +47,35 @@ namespace con
 		void Update()
 		{
 			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Key::A ) )
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"Hello! Woo! \1" );
-			if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"Hello! Woo!" );
+			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
 				this->context.messenger->AddMessage( MESSAGE_CONSOLE_SCROLL_DOWN, (int32_t)-1 );
-			if ( sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
 				this->context.messenger->AddMessage( MESSAGE_CONSOLE_SCROLL_UP, (int32_t)1 );
 		}
 
 	private:
-		void addTexts( const Vec2f& positionStart, const uint8_t fontSize, ConsoleScript& consoleScript )
+		void addTexts( ConsoleScript& consoleScript )
 		{
 			auto& textCache = this->context.resourceCache->uiTexts;
 			textCache.reserve( CONSOLE_VIEW_BUFFER );
-			auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
+			const auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
+			const Vec2f center( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2 );
 
-			Vec2f prevPos = positionStart;
-			float textHeight = 0;
-			for(auto& text : consoleScript.logsToDraw )
+			sf::Text testText( "test", font, CONSOLE_TEXT_SIZE );
+			const Vec2f textMaxSize( CONSOLE_MAX_TEXT_WIDTH, testText.getGlobalBounds().height );
+			const Vec2f startPosition( center.x - textMaxSize.x / 2, center.y - textMaxSize.y * 1.1f * ( CONSOLE_VIEW_BUFFER / 2 ) );
+
+			// Removing wrong offset for first text.
+			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * 1.1f );
+			for ( auto& text : consoleScript.logsToDraw )
 			{
 				textCache.emplace_back( std::make_unique<uiTextResource_t>( RESOURCE_PLAY_CONSOLE, TEXT_CONSOLE_LINE ) );
 				text = textCache.back().get();
 
 				text->setFont( font );
-				text->setCharacterSize( fontSize );
-				if ( textHeight == 0 )
-				{
-					text->setString( "blah" );
-					textHeight = text->getGlobalBounds().height;
-					text->setString( "" );
-				} else
-					prevPos.Set( positionStart.x, prevPos.y + textHeight + textHeight / 10.0f );
+				text->setCharacterSize( CONSOLE_TEXT_SIZE );
+				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * 1.1f );
 
 				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
 				textEntity.GetComponent<DrawableTextScript>().textToDraw = text;

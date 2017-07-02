@@ -71,7 +71,7 @@ namespace con
 		{
 			auto result = this->findMessage( id );
 			if ( result != this->messages.end() )
-				return static_cast<Message<T>*>( ( *result ).get() );
+				return reinterpret_cast<Message<T>*>( ( *result ).get() );
 
 			return nullptr;
 		}
@@ -83,7 +83,7 @@ namespace con
 
 			for ( auto& message : this->messages )
 				if ( message && message->id == id )
-					vec.push_back( static_cast<Message<T>*>( ( message.get() ) ) );
+					vec.push_back( reinterpret_cast<Message<T>*>( ( message.get() ) ) );
 
 			return vec;
 		}

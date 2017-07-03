@@ -24,12 +24,10 @@ namespace con
 
 	enum system_t : systemID_t
 	{
-		// IMPORTANT: Make coreSystems_t enum
-		// Core systems, don't touch!
-		SYSTEM_POSITION_UPDATE = 0,
-		SYSTEM_SIMPLE_PHYSIC,
-		SYSTEM_SCRIPT_UPDATE,
-		SYSTEM_RENDERER,
+		SYSTEM_POSITION_UPDATE = (systemID_t)coreSystems_t::POSITION_UPDATE,
+		SYSTEM_SIMPLE_PHYSIC = (systemID_t)coreSystems_t::SIMPLE_PHYSIC,
+		SYSTEM_SCRIPT_UPDATE = (systemID_t)coreSystems_t::SCRIPT_UPDATE,
+		SYSTEM_RENDERER = (systemID_t)coreSystems_t::RENDERER
 	};
 
 	enum group_t : groupID_t

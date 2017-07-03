@@ -33,7 +33,7 @@ namespace con
 
 		systemID_t GetID() const override
 		{
-			return 0;
+			return systemID_t( coreSystems_t::POSITION_UPDATE );
 		}
 
 		void Init() override

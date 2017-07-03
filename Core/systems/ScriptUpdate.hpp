@@ -30,7 +30,7 @@ namespace con
 
 		systemID_t GetID() const override
 		{
-			return 2;
+			return systemID_t( coreSystems_t::SCRIPT_UPDATE );
 		}
 
 		void Init() override

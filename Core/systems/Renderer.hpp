@@ -28,14 +28,14 @@ namespace con
 			System( std::move( cont ) )
 		{}
 
+		systemID_t GetID() const override
+		{
+			return systemID_t( coreSystems_t::RENDERER );
+		}
+
 		void Init() override
 		{
 			this->signature = createComponentSignature( getComponentTypeID<DrawableComponent>() );
-		}
-
-		systemID_t GetID() const override
-		{
-			return 3;
 		}
 
 		void Update() override;

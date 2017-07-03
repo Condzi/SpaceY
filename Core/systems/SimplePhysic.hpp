@@ -35,7 +35,7 @@ namespace con
 
 		systemID_t GetID() const override
 		{
-			return 1;
+			return systemID_t( coreSystems_t::SIMPLE_PHYSIC );
 		}
 
 		void Init() override

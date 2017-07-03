@@ -32,6 +32,14 @@ namespace con
 		DEBUG_DATA
 	};
 
+	enum class coreSystems_t : systemID_t
+	{
+		POSITION_UPDATE = 0,
+		SIMPLE_PHYSIC,
+		SCRIPT_UPDATE,
+		RENDERER
+	};
+
 	enum class coreMessages_t : messageID_t
 	{
 		INPUT_EVENT = 0

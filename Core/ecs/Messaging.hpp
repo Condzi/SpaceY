@@ -62,9 +62,11 @@ namespace con
 	{
 	public:
 		template <typename T>
-		void AddMessage( const messageID_t id, const T& data )
+		Message<T>* AddMessage( const messageID_t id, const T& data )
 		{
 			this->messages.emplace_back( std::make_unique<Message<T>>( id, data, this->messages.size() ) );
+			return reinterpret_cast<Message<T>*>( this->messages.back().get() );
+
 		}
 		template <typename T>
 		Message<T>* GetUniqueMessage( const messageID_t id )

@@ -2,6 +2,7 @@
 	Conrad 'Condzi' Kubacki 2017
 	https://github.com/condzi
 */
+
 #include <SFML/Graphics/Text.hpp>
 
 #include <Core/Config.hpp>

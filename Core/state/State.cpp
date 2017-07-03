@@ -1,3 +1,8 @@
+/*
+	Conrad 'Condzi' Kubacki 2017
+	https://github.com/condzi
+*/
+
 #include <Core/state/StateStack.hpp>
 
 namespace con

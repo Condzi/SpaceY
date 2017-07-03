@@ -39,24 +39,46 @@ namespace con
 		this->stateStack.ApplyPendingActions();
 
 		Clock clock;
-		sf::Event event;
 
 		while ( !this->exit && this->stateStack.GetStateOnTop() != (stateID_t)coreStates_t::EXIT )
 		{
-			while ( this->window.pollEvent( event ) )
-			{
-				if ( event.type == sf::Event::Closed )
-					this->Exit();
-			}
-			for ( auto& system : this->systems )
-				system->Update();
-			this->stateStack.Update();
-			this->messenger.ClearMessages();
+			this->pollEvents();
+			this->update();
 
-			this->entityManager.Refresh();
-			this->stateStack.ApplyPendingActions();
 			Time::FRAME_TIME = clock.Restart();
 		}
+	}
+
+	void Game::pollEvents()
+	{
+		// IDEA: Add same thing to update() and maybe setting / constexpr 'LOCK_UPDATE(or event)_WHEN_NO_FOCUS'
+		// Don't update input if window doesn't have focus.
+		if ( !this->window.hasFocus() )
+			return;
+
+		sf::Event event;
+		while ( this->window.pollEvent( event ) )
+		{
+			if ( event.type == sf::Event::Closed )
+			{
+				this->Exit();
+				break;
+			}
+
+			// Copies temporary sf::Event state and mark it to delete at end of the loop.
+			this->messenger.AddMessage( (messageID_t)coreMessages_t::INPUT_EVENT, sf::Event( event ) )->safeDelete = true;
+		}
+	}
+
+	void Game::update()
+	{
+		for ( auto& system : this->systems )
+			system->Update();
+		this->stateStack.Update();
+		this->messenger.ClearMessages();
+
+		this->entityManager.Refresh();
+		this->stateStack.ApplyPendingActions();
 	}
 
 	void Game::assignContextPointers()

@@ -1,3 +1,7 @@
+/*
+	Conrad 'Condzi' Kubacki 2017
+	https://github.com/condzi
+*/
 #pragma once
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -79,6 +83,9 @@ namespace con
 		std::vector<std::unique_ptr<System>> systems;
 		bool exit;
 		std::string settingsPath;
+
+		void pollEvents();
+		void update();
 
 		void assignContextPointers();
 		void configureFromSettings();

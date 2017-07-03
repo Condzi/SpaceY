@@ -1,3 +1,8 @@
+/*
+	Conrad 'Condzi' Kubacki 2017
+	https://github.com/condzi
+*/
+
 #pragma once
 
 #include <Core/ecs/Config.hpp>
@@ -5,15 +10,13 @@
 // Forward declarations.
 namespace sf
 {
-	struct FloatRect;
+	template <typename T>
+	class Rect;
 	class Text;
 }
 
 namespace con
 {
-	// Forward declarations c.d
-	enum Key;
-
 	constexpr const char* GAME_NAME = "SpaceY";
 	// Amount of keys pressed / released stored in history
 	constexpr uint8_t INPUT_KEY_HISTORY = 128;
@@ -25,14 +28,18 @@ namespace con
 
 	enum class coreStates_t : stateID_t
 	{
-		EXIT = -1,
+		EXIT = 0,
 		DEBUG_DATA
 	};
 
-	// IDEA: Maybe move this to functions.hpp ?
-	sf::FloatRect getRealTextBounds( const sf::Text& text );
+	enum class coreMessages_t : messageID_t
+	{
+		INPUT_EVENT = 0
+		//MESSAGE_PHYSIC_COLLISION
+	};
 
-	bool isKeyPressed( Key key );
+	// IDEA: Maybe move this to functions.hpp ?
+	sf::Rect<float> getRealTextBounds( const sf::Text& text );
 }
 
 // IDEA: Maybe move this macro to Macros.hpp? Along with Assertions.

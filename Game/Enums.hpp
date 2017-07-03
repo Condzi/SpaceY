@@ -24,6 +24,7 @@ namespace con
 
 	enum system_t : systemID_t
 	{
+		// IMPORTANT: Make coreSystems_t enum
 		// Core systems, don't touch!
 		SYSTEM_POSITION_UPDATE = 0,
 		SYSTEM_SIMPLE_PHYSIC,
@@ -40,7 +41,7 @@ namespace con
 
 	enum resources_t : resourceID_t
 	{
-		TEXTURE_SHEET_PLACEHOLDER = 0,
+		TEXTURE_SHEET = 0,
 
 		FONT_CONSOLAS,
 
@@ -67,8 +68,7 @@ namespace con
 
 	enum message_t : messageID_t
 	{
-		MESSAGE_CONSOLE_ADD_LOG,
-		MESSAGE_CONSOLE_SCROLL_UP,
-		MESSAGE_CONSOLE_SCROLL_DOWN
+		MESSAGE_INPUT_EVENT = (messageID_t )coreMessages_t::INPUT_EVENT,
+		MESSAGE_CONSOLE_ADD_LOG
 	};
 }

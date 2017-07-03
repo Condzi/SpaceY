@@ -48,10 +48,6 @@ namespace con
 		{
 			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Key::A ) )
 				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"Hello! Woo!" );
-			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_SCROLL_DOWN, (int32_t)-1 );
-			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_SCROLL_UP, (int32_t)1 );
 		}
 
 	private:

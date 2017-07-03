@@ -8,6 +8,9 @@
 // std::rotate
 #include <algorithm>
 
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
+
 #include <Core/components/Script.hpp>
 #include <Core/resourceManaging/ResourceHolder.hpp>
 #include <Core/Context.hpp>
@@ -18,11 +21,10 @@
 
 namespace con
 {
-	struct ConsoleScript :
+	struct ConsoleScript final:
 		ScriptComponent
 	{
 		typedef Message<cstr_t> logMessage_t;
-		typedef Message<int32_t> scrollMessage_t;
 
 		std::array<sf::Text*, CONSOLE_VIEW_BUFFER> logsToDraw;
 
@@ -35,8 +37,13 @@ namespace con
 		{
 			auto& messenger = *this->context.messenger;
 			auto logsToAdd = messenger.GetAllMessages<cstr_t>( MESSAGE_CONSOLE_ADD_LOG );
-			auto scrollUp = messenger.GetUniqueMessage<int32_t>( MESSAGE_CONSOLE_SCROLL_UP );
-			auto scrollDown = messenger.GetUniqueMessage<int32_t>( MESSAGE_CONSOLE_SCROLL_DOWN );
+
+			int8_t wheelDelta = 0;
+			auto events = messenger.GetAllMessages<sf::Event>( MESSAGE_INPUT_EVENT );
+			for ( auto event : events )
+				if ( event->data.type == sf::Event::MouseWheelScrolled )
+					// When was raw data then causes ugly behaviour of scrolling few lines at once.
+					wheelDelta = event->data.mouseWheelScroll.delta > 0 ? 1 : -1;
 
 			bool logsNeedUpdate = false;
 			if ( !logsToAdd.empty() )
@@ -44,9 +51,9 @@ namespace con
 				this->handleLogAdd( std::move( logsToAdd ) );
 				logsNeedUpdate = true;
 			}
-			if ( scrollUp || scrollDown )
+			if ( wheelDelta )
 			{
-				this->handleScrolls( scrollUp, scrollDown );
+				this->handleScrolls( wheelDelta );
 				logsNeedUpdate = true;
 			}
 
@@ -72,27 +79,15 @@ namespace con
 			}
 		}
 
-		void handleScrolls( scrollMessage_t* up, scrollMessage_t* down )
+		void handleScrolls( const int8_t wheelDelta )
 		{
-			int8_t finalOffset = 0;
-			if ( up )
-			{
-				finalOffset += 1;
-				up->safeDelete = true;
-			}
-			if ( down )
-			{
-				finalOffset -= 1;
-				down->safeDelete = true;
-			}
-
-			int8_t offsetResult = this->logOnTop + finalOffset;
+			int8_t offsetResult = this->logOnTop + wheelDelta;
 			if ( offsetResult <= CONSOLE_VIEW_BUFFER - 1 )
 				this->logOnTop = CONSOLE_VIEW_BUFFER - 1;
 			else if ( offsetResult >= CONSOLE_CAPACITY - 1 )
 				this->logOnTop = CONSOLE_CAPACITY - 1;
 			else
-				this->logOnTop += finalOffset;
+				this->logOnTop += wheelDelta;
 		}
 
 		void updateLogsToDraw()

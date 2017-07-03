@@ -1,12 +1,22 @@
 #pragma once
 
-#include <SFML/Graphics/Text.hpp>
-
 #include <Core/ecs/Config.hpp>
+
+// Forward declarations.
+namespace sf
+{
+	struct FloatRect;
+	class Text;
+}
 
 namespace con
 {
+	// Forward declarations c.d
+	enum Key;
+
 	constexpr const char* GAME_NAME = "SpaceY";
+	// Amount of keys pressed / released stored in history
+	constexpr uint8_t INPUT_KEY_HISTORY = 128;
 
 	typedef int16_t stateID_t;
 	typedef int8_t resourcePriorityID_t;
@@ -20,15 +30,9 @@ namespace con
 	};
 
 	// IDEA: Maybe move this to functions.hpp ?
-	inline sf::FloatRect getRealTextBounds( const sf::Text& text )
-	{
-		return sf::FloatRect(
-			text.getPosition().x + ( text.getCharacterSize() * 3 ) / 50.0f,
-			text.getPosition().y + ( text.getCharacterSize() * 15.3f ) / 50.0f,
-			text.getGlobalBounds().width,
-			text.getGlobalBounds().height
-		);
-	}
+	sf::FloatRect getRealTextBounds( const sf::Text& text );
+
+	bool isKeyPressed( Key key );
 }
 
 // IDEA: Maybe move this macro to Macros.hpp? Along with Assertions.

@@ -4,6 +4,7 @@
 #include <Core/systems/ScriptUpdate.hpp>
 #include <Core/systems/Renderer.hpp>
 #include <Core/state/DebugData.hpp>
+#include <Core/Config.hpp>
 
 namespace con
 {
@@ -40,7 +41,7 @@ namespace con
 		Clock clock;
 		sf::Event event;
 
-		while ( !exit && this->stateStack.GetStateOnTop() != EXIT_STATE )
+		while ( !this->exit && this->stateStack.GetStateOnTop() != (stateID_t)coreStates_t::EXIT )
 		{
 			while ( this->window.pollEvent( event ) )
 			{
@@ -101,11 +102,11 @@ namespace con
 
 	void Game::registerDefaultStates()
 	{
-		this->RegisterState<ExitState>( EXIT_STATE );
+		this->RegisterState<ExitState>( (stateID_t)coreStates_t::EXIT );
 		if ( this->GetContext().settings->GetBool( "DEBUG", "DEBUG_DATA" ) )
 		{
-			this->RegisterState<DebugDataState>( DEBUG_DATA_STATE );
-			this->stateStack.Push( DEBUG_DATA_STATE );
+			this->RegisterState<DebugDataState>( (stateID_t)coreStates_t::DEBUG_DATA );
+			this->stateStack.Push( (stateID_t)coreStates_t::DEBUG_DATA );
 		}
 	}
 

@@ -26,7 +26,7 @@ namespace con
 			action_t action;
 			stateID_t state;
 
-			pendingAction_t( const action_t act, const stateID_t stat = EXIT_STATE );
+			pendingAction_t( const action_t act, const stateID_t stat = (stateID_t)coreStates_t::EXIT );
 		};
 
 	public:
@@ -56,11 +56,11 @@ namespace con
 		{
 			this->pendingActions.emplace_back( action_t::PUSH, std::move( id ) );
 		}
-		// Returns STATE_EXIT if no states on stack.
+		// Returns EXIT if no states on stack.
 		stateID_t GetStateOnTop()
 		{
 			if ( this->stack.empty() )
-				return EXIT_STATE;
+				return (stateID_t)coreStates_t::EXIT;
 
 			return this->stack.back()->GetID();
 		}

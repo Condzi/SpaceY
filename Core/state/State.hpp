@@ -84,7 +84,7 @@ namespace con
 
 		stateID_t GetID() const override
 		{
-			return EXIT_STATE;
+			return (stateID_t)coreStates_t::EXIT;
 		}
 	};
 }

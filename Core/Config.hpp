@@ -6,14 +6,18 @@
 
 namespace con
 {
-	constexpr const char* GAME_NAME = "ConEngine";
-	constexpr int16_t EXIT_STATE = -1;
-	constexpr int16_t DEBUG_DATA_STATE = 0;
+	constexpr const char* GAME_NAME = "SpaceY";
 
 	typedef int16_t stateID_t;
 	typedef int8_t resourcePriorityID_t;
 	typedef int8_t resourceID_t;
 	typedef const char* cstr_t;
+
+	enum class coreStates_t : stateID_t
+	{
+		EXIT = -1,
+		DEBUG_DATA
+	};
 
 	// IDEA: Maybe move this to functions.hpp ?
 	inline sf::FloatRect getRealTextBounds( const sf::Text& text )

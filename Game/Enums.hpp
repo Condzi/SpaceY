@@ -11,8 +11,8 @@ namespace con
 {
 	enum state_t : stateID_t
 	{
-		STATE_EXIT = EXIT_STATE,
-		STATE_DEBUG_DATA = DEBUG_DATA_STATE,
+		STATE_EXIT = (stateID_t)coreStates_t::EXIT,
+		STATE_DEBUG_DATA = (stateID_t)coreStates_t::DEBUG_DATA,
 		STATE_LOADING_SCREEN,
 		STATE_MENU,
 		// Console screen

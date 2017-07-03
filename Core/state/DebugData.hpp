@@ -29,7 +29,7 @@ namespace con
 
 		stateID_t GetID() const override
 		{
-			return DEBUG_DATA_STATE;
+			return (stateID_t)coreStates_t::DEBUG_DATA;
 		}
 
 		void Update()

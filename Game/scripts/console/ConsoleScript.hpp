@@ -43,7 +43,7 @@ namespace con
 			for ( auto event : events )
 				if ( event->data.type == sf::Event::MouseWheelScrolled )
 					// When was raw data then causes ugly behaviour of scrolling few lines at once.
-					wheelDelta = event->data.mouseWheelScroll.delta > 0 ? 1 : -1;
+					wheelDelta = event->data.mouseWheelScroll.delta /*> 0 ? 1 : -1*/;
 
 			bool logsNeedUpdate = false;
 			if ( !logsToAdd.empty() )
@@ -93,7 +93,12 @@ namespace con
 		void updateLogsToDraw()
 		{
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
+			{
 				logsToDraw[i]->setString( logs[this->logOnTop - i] );
+				float logWidth = logsToDraw[i]->getGlobalBounds().width;
+				if ( logWidth > CONSOLE_MAX_TEXT_WIDTH )
+					LOG( "Log text for console is too big; graphic bugs will occur. (" << logWidth << '/' << CONSOLE_MAX_TEXT_WIDTH, WARNING, CONSOLE );
+			}
 		}
 	};
 }

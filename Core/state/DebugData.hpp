@@ -36,7 +36,7 @@ namespace con
 		{
 			this->avgFPS.resize( this->avgFPS.size() + 1, Time::FRAME_TIME.AsSeconds() );
 
-			if ( this->debugUpdateClock.GetEleapsedTime() >= asSeconds( 1.0f ) )
+			if ( this->debugUpdateClock.GetEleapsedTime() >= asSeconds( 0.2f ) )
 			{
 				LOG( "++++ DEBUG DATA ++++", INFO, CONSOLE );
 				LOG( "Average FPS: " << 1 / ( this->avgFPS.sum() / this->avgFPS.size() ), INFO, CONSOLE );

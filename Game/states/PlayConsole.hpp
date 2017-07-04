@@ -47,7 +47,10 @@ namespace con
 		void Update()
 		{
 			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Key::A ) )
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"Hello! Woo!" );
+			{
+				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"I have a idea... Maybe separate one message into two?" );
+				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, ( cstr_t )"Lol, this may work!" );
+			}
 		}
 
 	private:

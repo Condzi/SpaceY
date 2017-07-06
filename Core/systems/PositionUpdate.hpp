@@ -66,8 +66,8 @@ namespace con
 					position->x = body->position.x;
 					position->y = body->position.y;
 				}
-				if ( drawable )
-					drawable->sprite.setPosition( position->x, position->y );
+				if ( drawable && drawable->object.GetAsTransformable() )
+					drawable->object.GetAsTransformable()->setPosition( position->x, position->y );
 			}
 		}
 

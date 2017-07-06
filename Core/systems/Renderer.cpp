@@ -25,7 +25,7 @@ namespace con
 			for ( auto drawable : drawables )
 				if ( drawable->drawLayer == currentLayer )
 				{
-					window->draw( drawable->sprite );
+					window->draw( *drawable->object.GetAsDrawable() );
 					entitiesAlreadyDrawn++;
 				}
 		}
@@ -40,7 +40,11 @@ namespace con
 
 		for ( auto entity : entities )
 			if ( entity->IsActive() && entity->IsAlive() )
-				drawables.push_back( &entity->GetComponent<DrawableComponent>() );
+			{
+				auto drawable = &entity->GetComponent<DrawableComponent>();
+				if ( drawable->object.GetAsDrawable() )
+					drawables.push_back( drawable );
+			}
 
 		return drawables;
 	}

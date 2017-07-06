@@ -21,6 +21,7 @@ namespace con
 	using fontResource_t = ResourceWrapper<sf::Font>;
 	using uiTextResource_t = ResourceWrapper<sf::Text>;
 
+	// TODO: Use same trick like in DrawableComponent (with template method to get resources)
 	/*
 	===============================================================================
 	Created by: Condzi
@@ -39,6 +40,9 @@ namespace con
 		textureResource_t* GetTexture( const resourceID_t id ) const;
 		uiTextResource_t* GetText( const resourceID_t id ) const;
 		fontResource_t* GetFont( const resourceID_t id ) const;
+		std::vector<textureResource_t*> GetAllTexturesByID( const resourceID_t id ) const;
+		std::vector<uiTextResource_t*> GetAllTextsByID( const resourceID_t id ) const;
+		std::vector<fontResource_t*> GetAllFontsByID( const resourceID_t id ) const;
 
 		void DeleteAllResources();
 		void DeleteAllResourcesByPriority( const resourcePriorityID_t priority );

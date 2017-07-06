@@ -67,17 +67,17 @@ namespace con
 
 			// Removing wrong offset for first text.
 			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * 1.1f );
-			for ( auto& text : consoleScript.logsToDraw )
+			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
 				textCache.emplace_back( std::make_unique<uiTextResource_t>( RESOURCE_PLAY_CONSOLE, TEXT_CONSOLE_LINE ) );
-				text = textCache.back().get();
+				auto text = textCache.back().get();
 
 				text->setFont( font );
 				text->setCharacterSize( CONSOLE_TEXT_SIZE );
 				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * 1.1f );
 
 				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
-				textEntity.GetComponent<DrawableTextScript>().textToDraw = text;
+				*textEntity.GetComponent<DrawableComponent>().object.GetAsText() = *text;
 				textEntity.GetComponent<PositionComponent>().x = prevPos.x;
 				textEntity.GetComponent<PositionComponent>().y = prevPos.y;
 			}

@@ -21,12 +21,10 @@
 
 namespace con
 {
-	struct ConsoleScript final:
+	struct ConsoleScript final :
 		ScriptComponent
 	{
 		typedef Message<cstr_t> logMessage_t;
-
-		std::array<sf::Text*, CONSOLE_VIEW_BUFFER> logsToDraw;
 
 		void Init() override
 		{
@@ -92,10 +90,14 @@ namespace con
 
 		void updateLogsToDraw()
 		{
+			auto textEntities = this->context.entityManager->GetEntitiesWithSignature( ENTITY_TEXT_CONSOLE );
+			CON_ASSERT( textEntities.size() == CONSOLE_VIEW_BUFFER, "There is more console lines of text than declared" );
+
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
-				logsToDraw[i]->setString( logs[this->logOnTop - i] );
-				float logWidth = logsToDraw[i]->getGlobalBounds().width;
+				auto textPtr = textEntities[i]->GetComponent<DrawableComponent>().object.GetAsText();
+				textPtr->setString( logs[this->logOnTop - i]);
+				float logWidth = textPtr->getGlobalBounds().width;
 				if ( logWidth > CONSOLE_MAX_TEXT_WIDTH )
 					LOG( "Log text for console is too big; graphic bugs will occur. (" << logWidth << '/' << CONSOLE_MAX_TEXT_WIDTH, WARNING, CONSOLE );
 			}

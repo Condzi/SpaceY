@@ -37,6 +37,39 @@ namespace con
 		return nullptr;
 	}
 
+	std::vector<textureResource_t*> ResourceHolder::GetAllTexturesByID( const resourceID_t id ) const
+	{
+		std::vector<textureResource_t*> vec;
+		vec.reserve( this->textures.size() );
+
+		for ( auto& texture : this->textures )
+			if ( texture->GetResourceID() == id )
+				vec.push_back( texture.get() );
+		return vec;
+	}
+
+	std::vector<uiTextResource_t*> ResourceHolder::GetAllTextsByID( const resourceID_t id ) const
+	{
+		std::vector<uiTextResource_t*> vec;
+		vec.reserve( this->uiTexts.size() );
+
+		for ( auto& text : this->uiTexts)
+			if ( text->GetResourceID() == id )
+				vec.push_back( text.get() );
+		return vec;
+	}
+
+	std::vector<fontResource_t*> ResourceHolder::GetAllFontsByID( const resourceID_t id ) const
+	{
+		std::vector<fontResource_t*> vec;
+		vec.reserve( this->fonts.size() );
+
+		for ( auto& font : this->fonts )
+			if ( font->GetResourceID() == id )
+				vec.push_back( font.get() );
+		return vec;
+	}
+
 	void ResourceHolder::DeleteAllResources()
 	{
 		LOG( "Starting to delete all resources...", INFO, BOTH );

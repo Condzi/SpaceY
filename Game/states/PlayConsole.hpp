@@ -56,8 +56,6 @@ namespace con
 	private:
 		void addTexts( ConsoleScript& consoleScript )
 		{
-			auto& textCache = this->context.resourceCache->uiTexts;
-			textCache.reserve( CONSOLE_VIEW_BUFFER );
 			const auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
 			const Vec2f center( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2 );
 
@@ -69,17 +67,14 @@ namespace con
 			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * 1.1f );
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
-				textCache.emplace_back( std::make_unique<uiTextResource_t>( RESOURCE_PLAY_CONSOLE, TEXT_CONSOLE_LINE ) );
-				auto text = textCache.back().get();
+				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
+				textEntity.GetComponent<PositionComponent>().x = prevPos.x;
+				textEntity.GetComponent<PositionComponent>().y = prevPos.y;
+				auto text = textEntity.GetComponent<DrawableComponent>().object.GetAsText();
 
 				text->setFont( font );
 				text->setCharacterSize( CONSOLE_TEXT_SIZE );
 				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * 1.1f );
-
-				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
-				*textEntity.GetComponent<DrawableComponent>().object.GetAsText() = *text;
-				textEntity.GetComponent<PositionComponent>().x = prevPos.x;
-				textEntity.GetComponent<PositionComponent>().y = prevPos.y;
 			}
 		}
 	};

@@ -40,8 +40,7 @@ namespace con
 			auto events = messenger.GetAllMessages<sf::Event>( MESSAGE_INPUT_EVENT );
 			for ( auto event : events )
 				if ( event->data.type == sf::Event::MouseWheelScrolled )
-					// When was raw data then causes ugly behaviour of scrolling few lines at once.
-					wheelDelta = event->data.mouseWheelScroll.delta /*> 0 ? 1 : -1*/;
+					wheelDelta = static_cast<int8_t>( event->data.mouseWheelScroll.delta );
 
 			bool logsNeedUpdate = false;
 			if ( !logsToAdd.empty() )

@@ -41,9 +41,7 @@ namespace con
 	{
 		TEXTURE_SHEET = 0,
 
-		FONT_CONSOLAS,
-
-		TEXT_CONSOLE_LINE
+		FONT_CONSOLAS
 	};
 
 	enum resourcePriority_t : resourcePriorityID_t

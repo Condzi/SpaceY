@@ -41,7 +41,7 @@ namespace con
 
 		void CreateEntity( Entity& entity, Context& context )
 		{
-			entity.AddComponent<EntityTagComponent>().tag = ENTITY_TEXT_CONSOLE;
+			entity.AddComponent<EntityTagComponent>().tag = ENTITY_CONSOLE;
 			entity.AddScriptComponent<ConsoleScript>( context );
 			entity.AddGroup( GROUP_PLAY_STATE_CONSOLE );
 		}

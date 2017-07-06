@@ -18,13 +18,14 @@
 
 #include <Game/Enums.hpp>
 #include <Game/Config.hpp>
+#include <Game/scripts/console/ConsoleMessage.hpp>
 
 namespace con
 {
 	struct ConsoleScript final :
 		ScriptComponent
 	{
-		typedef Message<cstr_t> logMessage_t;
+		typedef Message<consoleMessage_t> logMessage_t;
 
 		void Init() override
 		{
@@ -34,7 +35,7 @@ namespace con
 		void Update() override
 		{
 			auto& messenger = *this->context.messenger;
-			auto logsToAdd = messenger.GetAllMessages<cstr_t>( MESSAGE_CONSOLE_ADD_LOG );
+			auto logsToAdd = messenger.GetAllMessages<consoleMessage_t>( MESSAGE_CONSOLE_ADD_LOG );
 
 			int8_t wheelDelta = 0;
 			auto events = messenger.GetAllMessages<sf::Event>( MESSAGE_INPUT_EVENT );
@@ -59,7 +60,7 @@ namespace con
 		}
 
 	private:
-		std::array<cstr_t, CONSOLE_CAPACITY> logs;
+		std::array<consoleMessage_t, CONSOLE_CAPACITY> logs;
 		// If we have id of log on top we can easly calculate interval of logs to draw.
 		uint8_t logOnTop;
 
@@ -95,7 +96,17 @@ namespace con
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
 				auto textPtr = textEntities[i]->GetComponent<DrawableComponent>().object.GetAsText();
-				textPtr->setString( logs[this->logOnTop - i]);
+				auto& log = logs[this->logOnTop - i];
+				textPtr->setString( log.message );
+				textPtr->setFillColor( [log]() -> sf::Color
+				{
+					switch ( log.type )
+					{
+					case consoleMessage_t::INFO: return sf::Color::White;
+					case consoleMessage_t::WARNING: return sf::Color::Yellow;
+					case consoleMessage_t::ERROR: return sf::Color::Red;
+					}
+				}( ) );
 				float logWidth = textPtr->getGlobalBounds().width;
 				if ( logWidth > CONSOLE_MAX_TEXT_WIDTH )
 					LOG( "Log text for console is too big; graphic bugs will occur. (" << logWidth << '/' << CONSOLE_MAX_TEXT_WIDTH, WARNING, CONSOLE );

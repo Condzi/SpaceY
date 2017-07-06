@@ -56,17 +56,15 @@ namespace con
 		bool resourcesLoaded = false;
 		void loadTextures()
 		{
-			auto& cache = *this->context.resourceCache;
+			auto& cache = this->context.resourceCache->textures;
 
-			/*
-			cache->textures.emplace_back( std::make_unique<textureResource_t>( RESOURCE_MULTISTATE, TEXTURE_SHEET_PLACEHOLDER ) );
-			auto& sheet = cache->textures.back();
-			if ( !sheet->loadFromFile( "TextureSheet.png" ) )
+			cache.emplace_back( std::make_unique<textureResource_t>( RESOURCE_MULTISTATE, TEXTURE_ATLAS ) );
+			auto& sheet = cache.back();
+			if ( !sheet->loadFromFile( "data/texture_atlas.png" ) )
 			{
-				cache->textures.pop_back();
-				LOG( "Cannot load data/TextureSheet.png", ERROR, BOTH );
+				cache.pop_back();
+				LOG( "Cannot load data/texture_atlas.png", ERROR, BOTH );
 			}
-			*/
 		}
 
 		void loadFonts()
@@ -89,6 +87,7 @@ namespace con
 			entityFactory.AddCreator<TextConsoleCreator>();
 			entityFactory.AddCreator<ConsoleCreator>();
 			entityFactory.AddCreator<PlayConsoleStateGameMasterCreator>();
+			entityFactory.AddCreator<DrawableEntityCreator>();
 		}
 	};
 }

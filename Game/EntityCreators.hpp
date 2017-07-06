@@ -34,6 +34,22 @@ namespace con
 		}
 	};
 
+	struct DrawableEntityCreator final :
+		EntityCreator
+	{
+		entityID_t GetID() const override
+		{
+			return ENTITY_SPRITE;
+		}
+
+		void CreateEntity( Entity& entity, Context& context ) override
+		{
+			entity.AddComponent<PositionComponent>();
+			entity.AddComponent<DrawableComponent>();
+			entity.AddComponent<EntityTagComponent>().tag = ENTITY_SPRITE;
+		}
+	};
+
 	struct ConsoleCreator final :
 		EntityCreator
 	{
@@ -60,7 +76,9 @@ namespace con
 
 		void CreateEntity( Entity& entity, Context& context ) override
 		{
+			entity.AddComponent<EntityTagComponent>().tag = ENTITY_PLAY_CONSOLE_STATE_GAME_MASTER;
 			entity.AddScriptComponent<PlayConsoleStateGameMaster>( context );
+			entity.AddGroup( GROUP_PLAY_STATE_CONSOLE );
 		}
 	};
 }

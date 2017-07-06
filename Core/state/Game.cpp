@@ -51,10 +51,6 @@ namespace con
 
 	void Game::pollEvents()
 	{
-		// IDEA: Add same thing to update() and maybe setting / constexpr 'LOCK_UPDATE(or event)_WHEN_NO_FOCUS'
-		// Don't update input if window doesn't have focus.
-		if ( !this->window.hasFocus() )
-			return;
 
 		sf::Event event;
 		while ( this->window.pollEvent( event ) )
@@ -65,6 +61,10 @@ namespace con
 				break;
 			}
 
+			// IDEA: Add same thing to update() and maybe setting / constexpr 'LOCK_UPDATE(or event)_WHEN_NO_FOCUS'
+			// Don't update input if window doesn't have focus.
+			if ( !this->window.hasFocus() )
+				continue;
 			// Copies temporary sf::Event state and mark it to delete at end of the loop.
 			this->messenger.AddMessage( (messageID_t)coreMessages_t::INPUT_EVENT, sf::Event( event ) )->safeDelete = true;
 		}

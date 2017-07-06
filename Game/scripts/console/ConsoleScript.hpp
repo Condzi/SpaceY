@@ -30,6 +30,7 @@ namespace con
 		void Init() override
 		{
 			this->logOnTop = CONSOLE_VIEW_BUFFER - 1;
+			this->signature = createComponentSignature( getComponentTypeID<EntityTagComponent>() );
 		}
 
 		void Update() override
@@ -61,6 +62,7 @@ namespace con
 
 	private:
 		std::array<consoleMessage_t, CONSOLE_CAPACITY> logs;
+		componentBitset_t signature;
 		// If we have id of log on top we can easly calculate interval of logs to draw.
 		uint8_t logOnTop;
 
@@ -90,7 +92,14 @@ namespace con
 
 		void updateLogsToDraw()
 		{
-			auto textEntities = this->context.entityManager->GetEntitiesWithSignature( ENTITY_TEXT_CONSOLE );
+			auto textEntities = this->context.entityManager->GetEntitiesWithSignature( this->signature );
+			textEntities.erase( std::remove_if( textEntities.begin(), textEntities.end(), 
+				[]( Entity* entity ) 
+			{
+				return entity->GetComponent<EntityTagComponent>().tag != ENTITY_TEXT_CONSOLE;
+			} 
+			), textEntities.end() );
+
 			CON_ASSERT( textEntities.size() == CONSOLE_VIEW_BUFFER, "There is more console lines of text than declared" );
 
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )

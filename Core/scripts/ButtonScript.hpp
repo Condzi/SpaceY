@@ -38,14 +38,14 @@ namespace con
 
 			if ( !drawableComponent.object.GetAsDrawable() )
 				LOG( "Drawable not set for button", WARNING, BOTH );
-			else if ( *drawableComponent.object.GetAsText() )
-				buttonBounds = getRealTextBounds( **drawableComponent.object.GetAsText() );
-			else if ( *drawableComponent.object.GetAsSprite() )
-				buttonBounds = ( *drawableComponent.object.GetAsSprite() )->getGlobalBounds();
-			else if ( *drawableComponent.object.GetAsRectShape() )
-				buttonBounds = ( *drawableComponent.object.GetAsRectShape() )->getGlobalBounds();
-			else if ( *drawableComponent.object.GetAsCircleShape() )
-				buttonBounds = ( *drawableComponent.object.GetAsCircleShape() )->getGlobalBounds();
+			else if ( drawableComponent.object.GetAsText() )
+				buttonBounds = getRealTextBounds( *drawableComponent.object.GetAsText() );
+			else if ( drawableComponent.object.GetAsSprite() )
+				buttonBounds = ( drawableComponent.object.GetAsSprite() )->getGlobalBounds();
+			else if ( drawableComponent.object.GetAsRectShape() )
+				buttonBounds = ( drawableComponent.object.GetAsRectShape() )->getGlobalBounds();
+			else if ( drawableComponent.object.GetAsCircleShape() )
+				buttonBounds = ( drawableComponent.object.GetAsCircleShape() )->getGlobalBounds();
 
 			if ( buttonBounds.contains( mousePos.x, mousePos.y ) &&
 				sf::Mouse::isButtonPressed( sf::Mouse::Left ) )

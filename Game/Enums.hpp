@@ -39,7 +39,7 @@ namespace con
 
 	enum resources_t : resourceID_t
 	{
-		TEXTURE_SHEET = 0,
+		TEXTURE_ATLAS = 0,
 
 		FONT_CONSOLAS
 	};
@@ -54,6 +54,8 @@ namespace con
 	{
 		ENTITY_CONSOLE = 0,
 		ENTITY_TEXT_CONSOLE,
+		// Misc sprite, background or something.
+		ENTITY_SPRITE,
 		
 		ENTITY_PLAY_CONSOLE_STATE_GAME_MASTER
 	};

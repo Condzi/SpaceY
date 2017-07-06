@@ -31,6 +31,7 @@ namespace con
 		{
 			this->StartThread();
 
+			this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_PLAY_CONSOLE_STATE_GAME_MASTER, this->context );
 			auto& console = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 
 			this->addTexts( console.GetComponent<ConsoleScript>() );
@@ -45,13 +46,7 @@ namespace con
 		}
 
 		void Update()
-		{
-			if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Key::A ) )
-			{
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "I have a idea... Maybe separate one message into two?", consoleMessage_t::WARNING ) );
-				this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "Lol, this may work!", consoleMessage_t::ERROR ) );
-			}
-		}
+		{}
 
 	private:
 		void addTexts( ConsoleScript& consoleScript )

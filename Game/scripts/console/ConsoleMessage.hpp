@@ -17,11 +17,11 @@ namespace con
 			INFO, WARNING, ERROR
 		};
 
-		cstr_t message = "";
+		std::string message = "";
 		messageType_t type = INFO;
 
-		consoleMessage_t( cstr_t msg = "", uint8_t msgType = INFO ) :
-			message( msg ),
+		consoleMessage_t( std::string msg = "", uint8_t msgType = INFO ) :
+			message( std::move( msg ) ),
 			type( static_cast<messageType_t>( msgType ) )
 		{}
 	};

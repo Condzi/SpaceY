@@ -53,7 +53,9 @@ namespace con
 	enum entity_t : uint8_t
 	{
 		ENTITY_CONSOLE = 0,
-		ENTITY_TEXT_CONSOLE
+		ENTITY_TEXT_CONSOLE,
+		
+		ENTITY_PLAY_CONSOLE_STATE_GAME_MASTER
 	};
 
 	enum drawLayer_t : int8_t

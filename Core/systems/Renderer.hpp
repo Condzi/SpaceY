@@ -10,6 +10,8 @@
 
 namespace con
 {
+	// TODO: Optimize layer rendering as mvxxx said. Just sort pointers in vector by layer id and call everything in
+	// one loop.
 	/*
 	===============================================================================
 	Created by: Condzi

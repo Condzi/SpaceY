@@ -105,6 +105,7 @@ namespace con
 					case consoleMessage_t::INFO: return sf::Color::White;
 					case consoleMessage_t::WARNING: return sf::Color::Yellow;
 					case consoleMessage_t::ERROR: return sf::Color::Red;
+					default: return sf::Color::Magenta;
 					}
 				}( ) );
 				float logWidth = textPtr->getGlobalBounds().width;

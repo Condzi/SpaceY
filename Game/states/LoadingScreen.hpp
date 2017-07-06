@@ -88,6 +88,7 @@ namespace con
 
 			entityFactory.AddCreator<TextConsoleCreator>();
 			entityFactory.AddCreator<ConsoleCreator>();
+			entityFactory.AddCreator<PlayConsoleStateGameMasterCreator>();
 		}
 	};
 }

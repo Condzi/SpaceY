@@ -12,23 +12,15 @@ namespace con
 		window->setView( this->view );
 
 		auto drawables = this->getDrawables();
+		std::sort( drawables.begin(), drawables.end(),
+			[]( DrawableComponent* first, DrawableComponent* second )
+		{
+			return first->drawLayer < second->drawLayer;
+		} );
 
 		window->clear();
-		auto drawLayersInterval = this->getDrawLayersInterval( drawables );
-		size_t entitiesAlreadyDrawn = 0;
-		for (
-			int8_t currentLayer = drawLayersInterval.first;
-			( currentLayer < drawLayersInterval.second + 1 && entitiesAlreadyDrawn < drawables.size() );
-			currentLayer++
-			)
-		{
-			for ( auto drawable : drawables )
-				if ( drawable->drawLayer == currentLayer )
-				{
-					window->draw( *drawable->object.GetAsDrawable() );
-					entitiesAlreadyDrawn++;
-				}
-		}
+		for ( auto drawable : drawables )
+			window->draw( *drawable->object.GetAsDrawable() );
 		window->display();
 	}
 
@@ -47,21 +39,6 @@ namespace con
 			}
 
 		return drawables;
-	}
-
-	std::pair<int8_t, int8_t> Renderer::getDrawLayersInterval( const std::vector<DrawableComponent*>& drawables ) const
-	{
-		int8_t min = INT8_MAX, max = INT8_MIN;
-
-		for ( auto drawable : drawables )
-		{
-			auto currentLayer = drawable->drawLayer;
-
-			if ( currentLayer > max ) max = currentLayer;
-			if ( currentLayer < min ) min = currentLayer;
-		}
-
-		return std::pair<int8_t, int8_t>( min, max );
 	}
 
 	void Renderer::updateView()

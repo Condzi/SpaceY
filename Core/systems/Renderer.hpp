@@ -10,8 +10,6 @@
 
 namespace con
 {
-	// TODO: Optimize layer rendering as mvxxx said. Just sort pointers in vector by layer id and call everything in
-	// one loop.
 	/*
 	===============================================================================
 	Created by: Condzi
@@ -47,7 +45,6 @@ namespace con
 		sf::View view;
 
 		std::vector<DrawableComponent*> getDrawables();
-		std::pair<int8_t, int8_t> getDrawLayersInterval( const std::vector<DrawableComponent*>& drawables ) const;
 		// Call when resizing a window.
 		void updateView();
 	};

@@ -33,21 +33,15 @@ namespace con
 
 			this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_PLAY_CONSOLE_STATE_GAME_MASTER, this->context );
 
-
 			auto& laptopBG = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_SPRITE, this->context );
-			laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite()->setTexture( *this->context.resourceCache->GetTexture( TEXTURE_ATLAS ) );
-			laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite()->setTextureRect( { 0, 0, 90,86 } );
+			laptopBG.GetComponent<DrawableComponent>().drawLayer = LAYER_BACKGROUND;
+			auto laptopSprite = laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite();
 
-			// IMPORTANT: !!FIXME!!
-			// HUUUGE TEMPORARY CODE, FIX ME PLEASE
-			const Vec2f center( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.5f );
-			sf::Text testText( "test", *this->context.resourceCache->GetFont( FONT_CONSOLAS ), CONSOLE_TEXT_SIZE );
-			const Vec2f textMaxSize( CONSOLE_MAX_TEXT_WIDTH, testText.getGlobalBounds().height );
-			const Vec2f startPosition( center.x - textMaxSize.x / 2, center.y - textMaxSize.y * 1.1f * ( CONSOLE_VIEW_BUFFER / 2 ) );
-			laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite()->setScale( textMaxSize.x / 80, textMaxSize.y * CONSOLE_VIEW_BUFFER * 1.1f / 60 );
-			laptopBG.GetComponent<PositionComponent>().x = startPosition.x - 5 * laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite()->getScale().x;
-			laptopBG.GetComponent<PositionComponent>().y = startPosition.y - 5 * laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite()->getScale().y;
-
+			laptopSprite->setTexture( *this->context.resourceCache->GetTexture( TEXTURE_ATLAS ) );
+			laptopSprite->setTextureRect( { 0, 0, 90,86 } );
+			float lapScale = this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 86.0f;
+			laptopSprite->setScale( lapScale, lapScale );
+			laptopSprite->setPosition( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2.0f - laptopSprite->getGlobalBounds().width / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2 - laptopSprite->getGlobalBounds().height / 2 );
 
 			auto& console = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 
@@ -66,17 +60,19 @@ namespace con
 		{}
 
 	private:
+		// TODO: Later create structure to hold information about console.
+		// How big the screen is, what font is used - this is needed for rendering. 
 		void addTexts( ConsoleScript& consoleScript )
 		{
 			const auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
 			const Vec2f center( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.5f );
-
+			const float offset = 1.15f;
 			sf::Text testText( "test", font, CONSOLE_TEXT_SIZE );
 			const Vec2f textMaxSize( CONSOLE_MAX_TEXT_WIDTH, testText.getGlobalBounds().height );
-			const Vec2f startPosition( center.x - textMaxSize.x / 2, center.y - textMaxSize.y * 1.1f * ( CONSOLE_VIEW_BUFFER / 2 ) );
+			const Vec2f startPosition( center.x - textMaxSize.x / 2, center.y - textMaxSize.y * offset * ( CONSOLE_VIEW_BUFFER / 2 - 1) );
 
 			// Removing wrong offset for first text.
-			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * 1.1f );
+			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * offset );
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
 				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
@@ -86,7 +82,7 @@ namespace con
 
 				text->setFont( font );
 				text->setCharacterSize( CONSOLE_TEXT_SIZE );
-				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * 1.1f );
+				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * offset );
 			}
 		}
 	};

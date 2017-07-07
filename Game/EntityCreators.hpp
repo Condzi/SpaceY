@@ -44,7 +44,7 @@ namespace con
 
 		void CreateEntity( Entity& entity, Context& context ) override
 		{
-			entity.AddComponent<PositionComponent>();
+		//	entity.AddComponent<PositionComponent>();
 			entity.AddComponent<DrawableComponent>();
 			entity.AddComponent<EntityTagComponent>().tag = ENTITY_SPRITE;
 		}

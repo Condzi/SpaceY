@@ -68,10 +68,10 @@ namespace con
 
 		void handleLogAdd( std::vector<logMessage_t*>& logsToAdd )
 		{
+			CON_ASSERT( logsToAdd.size() < CONSOLE_CAPACITY, "Console buffer overflow" );
+			
 			// Shift the array.
 			std::rotate( this->logs.rbegin(), this->logs.rbegin() + logsToAdd.size(), this->logs.rend() );
-
-			CON_ASSERT( logsToAdd.size() < CONSOLE_CAPACITY, "Console buffer overflow" );
 			for ( uint8_t i = 0; i < logsToAdd.size(); i++ )
 			{
 				this->logs[i] = logsToAdd[i]->data;

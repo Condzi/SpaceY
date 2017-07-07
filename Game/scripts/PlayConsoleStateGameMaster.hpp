@@ -34,7 +34,7 @@ namespace con
 			wildTime = 0;
 			auto messenger = this->context.messenger; 
 			messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( std::to_string(+(++wildCounter)) + " - wild counter value", consoleMessage_t::WARNING ) );
-			messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "It's rather a long message to localize so I'm worried about performance with std::string", consoleMessage_t::INFO ) );
+			messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "Short message bacause screen is small,the limit is 59 chars", consoleMessage_t::INFO ) );
 		}
 	};
 }

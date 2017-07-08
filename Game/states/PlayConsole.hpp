@@ -38,14 +38,14 @@ namespace con
 			auto laptopSprite = laptopBG.GetComponent<DrawableComponent>().object.GetAsSprite();
 
 			laptopSprite->setTexture( *this->context.resourceCache->GetTexture( TEXTURE_ATLAS ) );
-			laptopSprite->setTextureRect( { 0, 0, 90,86 } );
-			float lapScale = this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 86.0f;
+			laptopSprite->setTextureRect( { 0, 0, 352, 357 } );
+			float lapScale = this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 357.0f;
 			laptopSprite->setScale( lapScale, lapScale );
-			laptopSprite->setPosition( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2.0f - laptopSprite->getGlobalBounds().width / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2 - laptopSprite->getGlobalBounds().height / 2 );
+			laptopSprite->setPosition( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2.0f - laptopSprite->getGlobalBounds().width / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.0f - laptopSprite->getGlobalBounds().height / 2 );
 
 			auto& console = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 
-			this->addTexts( console.GetComponent<ConsoleScript>() );
+			this->addTexts( console.GetComponent<ConsoleScript>(), ( Vec2f( laptopSprite->getPosition() ) + 16 * lapScale ) );
 		}
 
 		void OnPop() override
@@ -62,17 +62,14 @@ namespace con
 	private:
 		// TODO: Later create structure to hold information about console.
 		// How big the screen is, what font is used - this is needed for rendering. 
-		void addTexts( ConsoleScript& consoleScript )
+		void addTexts( ConsoleScript& consoleScript, const Vec2f startPosition )
 		{
 			const auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
-			const Vec2f center( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.5f );
-			const float offset = 1.15f;
-			sf::Text testText( "test", font, CONSOLE_TEXT_SIZE );
+			const float offset = 1.0f;
+			sf::Text testText( "ABCDEFGHIJ", font, CONSOLE_TEXT_SIZE );
 			const Vec2f textMaxSize( CONSOLE_MAX_TEXT_WIDTH, testText.getGlobalBounds().height );
-			const Vec2f startPosition( center.x - textMaxSize.x / 2, center.y - textMaxSize.y * offset * ( CONSOLE_VIEW_BUFFER / 2 - 1) );
 
-			// Removing wrong offset for first text.
-			Vec2f prevPos( startPosition.x, startPosition.y - textMaxSize.y * offset );
+			Vec2f prevPos = startPosition;
 			for ( uint8_t i = 0; i < CONSOLE_VIEW_BUFFER; i++ )
 			{
 				auto& textEntity = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_TEXT_CONSOLE, this->context );
@@ -83,6 +80,7 @@ namespace con
 				text->setFont( font );
 				text->setCharacterSize( CONSOLE_TEXT_SIZE );
 				prevPos.Set( startPosition.x, prevPos.y + textMaxSize.y * offset );
+				LOG( prevPos.AsString(), INFO, CONSOLE );
 			}
 		}
 	};

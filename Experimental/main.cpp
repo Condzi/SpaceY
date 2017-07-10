@@ -5,18 +5,14 @@
 
 #include <iostream>
 
-#include "INIFile.hpp"
+#include "Settings.hpp"
+
+using namespace con::experimental;
 
 int main()
 {
-	con::experimental::INIFile file;
-	file.Open( "test.ini" );
-	file.Parse();
+	for ( auto& record : DefaultSettings<SETTINGS_DEFAULT_ENGINE>::records )
+		std::cout << '[' << record.section.data << "] " << record.name.data << " = " << record.value.data << '\n';
 
-	std::cout << file.GetValue( "SECTION", "val1" ) << '\n';
-	std::cout << file.GetValue( "SECTION", "val2" ) << '\n';
-	file.AddValue( "TEST SECTION", "val3", "hello world once more" );
-	file.Save();
 	std::cin.get();
-	return 0;
 }

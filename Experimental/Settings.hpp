@@ -87,6 +87,35 @@ namespace internal
 			CON_UNUSED_PARAM( name );
 			CON_THROW( "method specially not implemented, don't use it", NotImplemented );
 		}
+
+	protected:
+		bool load( const std::string path, INIFile& file )
+		{
+			if ( !file.Open( path ) )
+				return false;
+			file.Parse();
+			return true;
+		}
+		template <settings_t settingsDefaultType>
+		bool doesMatchWithDefault( INIFile& file )
+		{
+			for ( auto& record : Settings<settingsDefaultType>::records )
+				if ( !file.GetValuePtr( record.section.data, record.name.data ) )
+					return false;
+
+			return true;
+		}
+		template <settings_t settingsDefaultType>
+		bool createDefault( INIFile& file )
+		{
+			file.Clear();
+
+			for ( auto& record : Settings<settingsDefaultType>::records )
+				if ( !record.SkipWhenSaving() )
+					file.AddValue( record.section.data, record.name.data, record.value.data );
+
+			return file.Save();
+		}
 	};
 }
 // Dummy
@@ -114,36 +143,24 @@ struct Settings<SETTINGS_DEFAULT_ENGINE> final
 		END_SETTINGS_DEF
 };
 
+// Redundancy SETTINGS_ENGINE and SETTINGS_GAME...
 template<>
 struct Settings<SETTINGS_ENGINE> final :
 	internal::SettingsInterface
 {
 	bool Load( const std::string path ) override
 	{
-		if ( !this->file.Open( path ) )
-			return false;
-		this->file.Parse();
-		return true;
+		return this->load( path, this->file );
 	}
 
 	bool DoesMatchWithDefault() override
 	{
-		for ( auto& record : Settings<SETTINGS_DEFAULT_ENGINE>::records )
-			if ( !this->file.GetValuePtr( record.section.data, record.name.data ) )
-				return false;
-
-		return true;
+		return this->doesMatchWithDefault<SETTINGS_DEFAULT_ENGINE>( this->file );
 	}
 
 	bool CreateDefault() override
 	{
-		this->file.Clear();
-
-		for ( auto& record : Settings<SETTINGS_DEFAULT_ENGINE>::records )
-			if ( !record.SkipWhenSaving() )
-				this->file.AddValue( record.section.data, record.name.data, record.value.data );
-
-		return this->file.Save();
+		return this->createDefault<SETTINGS_DEFAULT_ENGINE>( this->file );
 	}
 
 	bool SaveCurrent() override
@@ -160,7 +177,38 @@ private:
 	INIFile file;
 };
 
+template<>
+struct Settings<SETTINGS_GAME> final :
+	internal::SettingsInterface
+{
+	bool Load( const std::string path ) override
+	{
+		return this->load( path, this->file );
+	}
 
+	bool DoesMatchWithDefault() override
+	{
+		return this->doesMatchWithDefault<SETTINGS_DEFAULT_GAME>( this->file );
+	}
+
+	bool CreateDefault() override
+	{
+		return this->createDefault<SETTINGS_DEFAULT_GAME>( this->file );
+	}
+
+	bool SaveCurrent() override
+	{
+		return this->file.Save();
+	}
+
+	std::string* Get( const std::string& section, const std::string& name ) override
+	{
+		return file.GetValuePtr( section, name );
+	}
+
+private:
+	INIFile file;
+};
 
 }
 }

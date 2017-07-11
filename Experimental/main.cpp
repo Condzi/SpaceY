@@ -4,6 +4,7 @@
 */
 
 #include <iostream>
+#include <array>
 
 #include "Settings.hpp"
 
@@ -11,8 +12,7 @@ using namespace con::experimental;
 
 int main()
 {
-	for ( auto& record : DefaultSettings<SETTINGS_DEFAULT_ENGINE>::records )
-		std::cout << '[' << record.section.data << "] " << record.name.data << " = " << record.value.data << '\n';
+	std::cout << DefaultSettings<SETTINGS_DEFAULT_ENGINE>::Get( "WINDOW", "FPS" );
 
 	std::cin.get();
 }

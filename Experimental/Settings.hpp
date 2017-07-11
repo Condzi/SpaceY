@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <array>
+
 #include <Core/Config.hpp>
 #include "INIFile.hpp"
 #include "ConstexprStructures.hpp"
@@ -18,10 +20,11 @@ namespace con
 			SETTINGS_DEFAULT_ENGINE,
 			SETTINGS_DEFAULT_GAME
 		};
+		constexpr uint8_t MAX_SETTINGS_RECORDS = 255;
 
-	// TODO: Improve this macros so they may auto format better.
-	#define BEGIN_SETTINGS_DEF										\
-		static constexpr record_t records[] =						\
+		// TODO: Improve this macros so they may auto format better.
+	#define BEGIN_SETTINGS_DEF													\
+		static constexpr std::array<record_t, MAX_SETTINGS_RECORDS> records =   \
 		{
 
 	#define DEFINE_SETTING( SECTION, NAME, VALUE )					\
@@ -30,15 +33,6 @@ namespace con
 	#define END_SETTINGS_DEF										\
 		};
 
-		struct record_t final // compile time version of INIFile::record_t
-		{
-			constexprString_t section, name, value;
-			constexpr record_t( constexprString_t _section, constexprString_t _name, constexprString_t _value ) :
-				section( std::move( _section ) ),
-				name( std::move( _name ) ),
-				value( std::move( _value ) )
-			{}
-		};
 
 		// Dummy
 		template <defaultSettings_t T>
@@ -62,6 +56,23 @@ namespace con
 				DEFINE_SETTING( "PHYSIC", "UPS", "60" )
 
 				END_SETTINGS_DEF
+
+
+			static constexpr constexprString_t Get( const constexprString_t& section, const constexprString_t& name )
+			{
+				auto result = constexprFindIf( 
+					DefaultSettings<SETTINGS_DEFAULT_ENGINE>::records.begin(), 
+					DefaultSettings<SETTINGS_DEFAULT_ENGINE>::records.end(),
+					[section, name]( const record_t& record )
+				{
+					return ( section == record.section ) && ( name == record.name );
+				} );
+				if ( result == DefaultSettings<SETTINGS_DEFAULT_ENGINE>::records.end() )
+					return constexprString_t( "" );
+
+				return result->value;
+			}
+
 		};
 
 		struct Settings

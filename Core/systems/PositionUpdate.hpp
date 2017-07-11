@@ -13,65 +13,62 @@
 #include <Core/components/SimpleBody.hpp>
 #include <Core/Context.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Sets position of PositionComponent and DrawableComponent to match
+	SimpleBody position.
+
+===============================================================================
+*/
+class PositionUpdateSystem final :
+	public System
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Sets position of PositionComponent and DrawableComponent to match
-		SimpleBody position.
+public:
+	PositionUpdateSystem( Context cont ) :
+		System( std::move( cont ) )
+	{}
 
-	===============================================================================
-	*/
-	class PositionUpdateSystem final :
-		public System
+	systemID_t GetID() const override
 	{
-	public:
-		PositionUpdateSystem( Context cont ) :
-			System( std::move( cont ) )
-		{}
+		return systemID_t( coreSystems_t::POSITION_UPDATE );
+	}
 
-		systemID_t GetID() const override
+	void Init() override
+	{
+		this->signature = createComponentSignature( getComponentTypeID<PositionComponent>() );
+	}
+
+	void Update() override
+	{
+		auto entities = this->context.entityManager->GetEntitiesWithSignature( this->signature );
+		entities.erase( std::remove_if( std::begin( entities ), std::end( entities ),
+						[]( auto entity )
 		{
-			return systemID_t( coreSystems_t::POSITION_UPDATE );
-		}
+			return !entity->IsActive() || !entity->IsAlive();
+		} ), std::end( entities ) );
 
-		void Init() override
-		{
-			this->signature = createComponentSignature( getComponentTypeID<PositionComponent>() );
-		}
+		for ( auto entity : entities ) {
+			PositionComponent* position = &entity->GetComponent<PositionComponent>();
+			DrawableComponent* drawable = nullptr;
+			SimpleBodyComponent* body = nullptr;
 
-		void Update() override
-		{
-			auto entities = this->context.entityManager->GetEntitiesWithSignature( this->signature );
-			entities.erase( std::remove_if( std::begin( entities ), std::end( entities ),
-				[]( auto entity )
-			{
-				return !entity->IsActive() || !entity->IsAlive();
-			} ), std::end( entities ) );
+			if ( entity->HasComponent<DrawableComponent>() )
+				drawable = &entity->GetComponent<DrawableComponent>();
+			if ( entity->HasComponent<SimpleBodyComponent>() )
+				body = &entity->GetComponent<SimpleBodyComponent>();
 
-			for ( auto entity : entities )
-			{
-				PositionComponent* position = &entity->GetComponent<PositionComponent>();
-				DrawableComponent* drawable = nullptr;
-				SimpleBodyComponent* body = nullptr;
-
-				if ( entity->HasComponent<DrawableComponent>() )
-					drawable = &entity->GetComponent<DrawableComponent>();
-				if ( entity->HasComponent<SimpleBodyComponent>() )
-					body = &entity->GetComponent<SimpleBodyComponent>();
-
-				if ( body )
-				{
-					position->x = body->position.x;
-					position->y = body->position.y;
-				}
-				if ( drawable && drawable->object.GetAsTransformable() )
-					drawable->object.GetAsTransformable()->setPosition( position->x, position->y );
+			if ( body ) {
+				position->x = body->position.x;
+				position->y = body->position.y;
 			}
+			if ( drawable && drawable->object.GetAsTransformable() )
+				drawable->object.GetAsTransformable()->setPosition( position->x, position->y );
 		}
+	}
 
-	private:
-		componentBitset_t signature;
-	};
+private:
+	componentBitset_t signature;
+};
 }

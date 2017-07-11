@@ -9,41 +9,40 @@
 #include <Core/Config.hpp>
 #include <Core/Context.hpp>
 
-namespace con
+namespace con {
+// Forward declarations.
+struct SimpleBodyComponent;
+enum collisionSide_t : uint8_t;
+
+/*
+===============================================================================
+Created by: Condzi
+	Interface structure for Scripts. Don't forget to call entity.AddScriptComponent!
+	It has methods: OnKill(), OnSleep(), OnActive(), FixedUpdate() <called every
+	frame>, Update() and OnCollision(first, second, side) <called when collision
+	occur>.
+
+===============================================================================
+*/
+struct ScriptComponent :
+	Component
 {
-	// Forward declarations.
-	struct SimpleBodyComponent;
-	enum collisionSide_t : uint8_t;
+	Context context;
 
-	/*
-	===============================================================================
-	Created by: Condzi
-		Interface structure for Scripts. Don't forget to call entity.AddScriptComponent!
-		It has methods: OnKill(), OnSleep(), OnActive(), FixedUpdate() <called every
-		frame>, Update() and OnCollision(first, second, side) <called when collision
-		occur>.
+	virtual void OnKill() {}
 
-	===============================================================================
-	*/
-	struct ScriptComponent :
-		Component
+	virtual void OnSleep() {}
+	virtual void OnActive() {}
+	// Called every frame even if parent entity is not active.
+	virtual void FixedUpdate() {}
+	// Called every frame.
+	virtual void Update() {}
+
+	virtual void OnCollision( SimpleBodyComponent& first, SimpleBodyComponent& second, collisionSide_t side )
 	{
-		Context context;
-
-		virtual void OnKill() {}
-
-		virtual void OnSleep() {}
-		virtual void OnActive() {}
-		// Called every frame even if parent entity is not active.
-		virtual void FixedUpdate() {}
-		// Called every frame.
-		virtual void Update() {}
-
-		virtual void OnCollision( SimpleBodyComponent& first, SimpleBodyComponent& second, collisionSide_t side )
-		{
-			CON_UNUSED_PARAM( first );
-			CON_UNUSED_PARAM( second );
-			CON_UNUSED_PARAM( side );
-		}
-	};
+		CON_UNUSED_PARAM( first );
+		CON_UNUSED_PARAM( second );
+		CON_UNUSED_PARAM( side );
+	}
+};
 }

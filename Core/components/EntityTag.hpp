@@ -7,8 +7,7 @@
 
 #include <Core/ecs/Component.hpp>
 
-namespace con
-{	/*
+namespace con {	/*
 	===============================================================================
 	Created by: Condzi
 		Entity Tag component stores uint8_t tag - value that you can assing your entity
@@ -16,9 +15,9 @@ namespace con
 
 	===============================================================================
 	*/
-	struct EntityTagComponent final :
-		Component
-	{
-		entityID_t tag = 0;
-	};
+struct EntityTagComponent final :
+	Component
+{
+	entityID_t tag = 0;
+};
 }

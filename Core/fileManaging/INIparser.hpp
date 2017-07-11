@@ -32,95 +32,94 @@
 #include <string>
 #include <vector>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Simple struct created for delivering messages about 'INIFile' class errors.
+
+===============================================================================
+*/
+struct INIError_t
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Simple struct created for delivering messages about 'INIFile' class errors.
+	std::string what = "";
+};
 
-	===============================================================================
-	*/
-	struct INIError_t
+/*
+===============================================================================
+Created by: Condzi
+	Class created for manipulating INI files. Almost every method has additional
+	parameter 'INIError_t*' - it's a pointer to error message. For example if
+	Parse() method return false, the INIError_t::what will contain information
+	about error.
+
+===============================================================================
+*/
+class INIFile
+{
+public:
+	INIFile() :
+		loaded( false ),
+		parsed( false )
+	{}
+
+	bool IsLoaded() const { return this->loaded; }
+	bool IsParsed() const { return this->parsed; }
+
+	bool LoadFromFile( const std::string& path, INIError_t* errorOutput = nullptr );
+	bool SaveToFile( const std::string& path, const std::string& headerComment = "", INIError_t* errorOutput = nullptr );
+	bool Parse( INIError_t* errorOutput = nullptr );
+
+	void Clear();
+
+	bool GetBool( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+	int GetInt( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+	double GetDouble( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+	std::string GetString( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+
+	void AddBool( const std::string& section, const std::string& name, bool data )
 	{
-		std::string what = "";
-	};
-
-	/*
-	===============================================================================
-	Created by: Condzi
-		Class created for manipulating INI files. Almost every method has additional
-		parameter 'INIError_t*' - it's a pointer to error message. For example if
-		Parse() method return false, the INIError_t::what will contain information
-		about error.
-
-	===============================================================================
-	*/
-	class INIFile 
+		this->parsedBool[section][name] = data;
+	}
+	void AddInt( const std::string& section, const std::string& name, int data )
 	{
-	public:
-		INIFile() :
-			loaded( false ),
-			parsed( false )
-		{}
+		this->parsedInt[section][name] = data;
+	}
+	void AddDouble( const std::string& section, const std::string& name, double data )
+	{
+		this->parsedDouble[section][name] = data;
+	}
+	void AddString( const std::string& section, const std::string& name, const std::string& data )
+	{
+		this->parsedString[section][name] = data;
+	}
 
-		bool IsLoaded() const { return this->loaded; }
-		bool IsParsed() const { return this->parsed; }
+private:
+	bool loaded;
+	bool parsed;
 
-		bool LoadFromFile( const std::string& path, INIError_t* errorOutput = nullptr );
-		bool SaveToFile( const std::string& path, const std::string& headerComment = "", INIError_t* errorOutput = nullptr );
-		bool Parse( INIError_t* errorOutput = nullptr );
+	std::vector<std::string> rawData;
+	//					<section name					<variable name, data>>
+	std::unordered_map<std::string, std::unordered_map<std::string, std::string>> parsedString;
+	std::unordered_map<std::string, std::unordered_map<std::string, int>> parsedInt;
+	std::unordered_map<std::string, std::unordered_map<std::string, double>> parsedDouble;
+	std::unordered_map<std::string, std::unordered_map<std::string, bool>> parsedBool;
 
-		void Clear();
+private:
+	bool isInt( const std::string& value );
+	bool isDouble( const std::string& value );
+	bool isBool( const std::string& value );
 
-		bool GetBool( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
-		int GetInt( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
-		double GetDouble( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
-		std::string GetString( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+	void clearMaps();
+	void removeBlanks( std::string& str );
+	void removeFirstBlanks( std::string& str );
+	void removeEscapeSeq( std::string& str );
 
-		void AddBool( const std::string& section, const std::string& name, bool data )
-		{
-			this->parsedBool[section][name] = data;
-		}
-		void AddInt( const std::string& section, const std::string& name, int data )
-		{
-			this->parsedInt[section][name] = data;
-		}
-		void AddDouble( const std::string& section, const std::string& name, double data )
-		{
-			this->parsedDouble[section][name] = data;
-		}
-		void AddString( const std::string& section, const std::string& name, const std::string& data )
-		{
-			this->parsedString[section][name] = data;
-		}
+	void serialize( std::unordered_map<std::string, std::vector<std::string>>& data );
 
-	private:
-		bool loaded;
-		bool parsed;
-
-		std::vector<std::string> rawData;
-		//					<section name					<variable name, data>>
-		std::unordered_map<std::string, std::unordered_map<std::string, std::string>> parsedString;
-		std::unordered_map<std::string, std::unordered_map<std::string, int>> parsedInt;
-		std::unordered_map<std::string, std::unordered_map<std::string, double>> parsedDouble;
-		std::unordered_map<std::string, std::unordered_map<std::string, bool>> parsedBool;
-
-	private:
-		bool isInt( const std::string& value );
-		bool isDouble( const std::string& value );
-		bool isBool( const std::string& value );
-
-		void clearMaps();
-		void removeBlanks( std::string& str );
-		void removeFirstBlanks( std::string& str );
-		void removeEscapeSeq( std::string& str );
-
-		void serialize( std::unordered_map<std::string, std::vector<std::string>>& data );
-
-		std::string getBoolAsString( bool val ) const
-		{
-			return ( val ) ? "true" : "false";
-		}
-	};
+	std::string getBoolAsString( bool val ) const
+	{
+		return ( val ) ? "true" : "false";
+	}
+};
 }

@@ -13,28 +13,27 @@
 #include <Game/scripts/console/ConsoleScript.hpp>
 #include <Game/Enums.hpp>
 
-namespace con
+namespace con {
+struct PlayConsoleStateGameMaster final :
+	ScriptComponent
 {
-	struct PlayConsoleStateGameMaster final :
-		ScriptComponent
+	void Init()
 	{
-		void Init()
-		{
-			this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "+=+=+= FALCON 1 STARTUP =+=+=+" ) );
-		}
+		this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "+=+=+= FALCON 1 STARTUP =+=+=+" ) );
+	}
 
-		uint8_t wildCounter = 0;
-		Time wildTime;
-		void Update() override
-		{
-			wildTime += Time::FRAME_TIME;
-			wildCounter++;
-			if ( wildTime < asMilliseconds( 500 ) )
-				return;
-			wildTime = 0;
-			auto messenger = this->context.messenger; 
-			messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( std::to_string(+(++wildCounter)) + " - wild counter value", consoleMessage_t::WARNING ) );
-			messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "Short message bacause screen is small,  limit is 57 chars", consoleMessage_t::INFO ) );
-		}
-	};
+	uint8_t wildCounter = 0;
+	Time wildTime;
+	void Update() override
+	{
+		wildTime += Time::FRAME_TIME;
+		wildCounter++;
+		if ( wildTime < asMilliseconds( 500 ) )
+			return;
+		wildTime = 0;
+		auto messenger = this->context.messenger;
+		messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( std::to_string( +( ++wildCounter ) ) + " - wild counter value", consoleMessage_t::WARNING ) );
+		messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "Short message bacause screen is small,  limit is 57 chars", consoleMessage_t::INFO ) );
+	}
+};
 }

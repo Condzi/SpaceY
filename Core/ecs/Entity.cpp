@@ -5,11 +5,10 @@
 
 #include <Core/ecs/EntityManager.hpp>
 
-namespace con
+namespace con {
+void Entity::AddGroup( const groupID_t group )
 {
-	void Entity::AddGroup( const groupID_t group )
-	{
-		this->groupBitset[group] = true;
-		this->entityManager->AddToGroup( this, group );
-	}
+	this->groupBitset[group] = true;
+	this->entityManager->AddToGroup( this, group );
+}
 }

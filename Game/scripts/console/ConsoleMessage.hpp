@@ -7,22 +7,21 @@
 
 #include <Core/Config.hpp>
 
-namespace con
+namespace con {
+// Contains data about message to log into game console.
+struct consoleMessage_t final
 {
-	// Contains data about message to log into game console.
-	struct consoleMessage_t final
+	enum messageType_t : uint8_t
 	{
-		enum messageType_t : uint8_t
-		{
-			INFO, WARNING, ERROR
-		};
-
-		std::string message = "";
-		messageType_t type = INFO;
-
-		consoleMessage_t( std::string msg = "", uint8_t msgType = INFO ) :
-			message( std::move( msg ) ),
-			type( static_cast<messageType_t>( msgType ) )
-		{}
+		INFO, WARNING, ERROR
 	};
+
+	std::string message = "";
+	messageType_t type = INFO;
+
+	consoleMessage_t( std::string msg = "", uint8_t msgType = INFO ) :
+		message( std::move( msg ) ),
+		type( static_cast<messageType_t>( msgType ) )
+	{}
+};
 }

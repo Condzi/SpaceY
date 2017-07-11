@@ -15,50 +15,49 @@
 #include <Core/Context.hpp>
 #include <Core/Settings.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Updates velocity of Entities, detects collision.
+
+===============================================================================
+*/
+class SimplePhysicSystem final :
+	public System
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Updates velocity of Entities, detects collision.
 
-	===============================================================================
-	*/
-	class SimplePhysicSystem final :
-		public System
+public:
+	SimplePhysicSystem( Context cont ) :
+		System( std::move( cont ) )
+	{}
+
+	systemID_t GetID() const override
 	{
+		return systemID_t( coreSystems_t::SIMPLE_PHYSIC );
+	}
 
-	public:
-		SimplePhysicSystem( Context cont ) :
-			System( std::move( cont ) )
-		{}
+	void Init() override
+	{
+		this->signature = createComponentSignature( getComponentTypeID<SimpleBodyComponent>() );
+		this->ups = asSeconds( 1.0f / static_cast<uint8_t>( this->context.settings->GetInt( "PHYSIC", "UPS" ) ) );
+	}
 
-		systemID_t GetID() const override
-		{
-			return systemID_t( coreSystems_t::SIMPLE_PHYSIC );
-		}
+	void Update() override;
 
-		void Init() override
-		{
-			this->signature = createComponentSignature( getComponentTypeID<SimpleBodyComponent>() );
-			this->ups = asSeconds( 1.0f / static_cast<uint8_t>( this->context.settings->GetInt( "PHYSIC", "UPS" ) ) );
-		}
+private:
+	const Vec2f GRAVITY{ 0, 10 };
+	componentBitset_t signature;
+	std::vector<SimpleBodyComponent*> bodies;
+	std::vector<Manifold> manifolds;
 
-		void Update() override;
+	Time timeAccumulator;
+	Time ups;
 
-	private:
-		const Vec2f GRAVITY { 0, 10 };
-		componentBitset_t signature;
-		std::vector<SimpleBodyComponent*> bodies;
-		std::vector<Manifold> manifolds;
-
-		Time timeAccumulator;
-		Time ups;
-
-		void updatePhysic();
-		void setBodies();
-		void integrateForces();
-		void clearForces();
-		void integrateVelocity();
-	};
+	void updatePhysic();
+	void setBodies();
+	void integrateForces();
+	void clearForces();
+	void integrateVelocity();
+};
 }

@@ -5,49 +5,48 @@
 
 #include <Core/state/StateStack.hpp>
 
-namespace con
+namespace con {
+void State::StartThread()
 {
-	void State::StartThread()
-	{
-		if ( this->threadRunning )
-			this->StopThread();
+	if ( this->threadRunning )
+		this->StopThread();
 
-		this->threadRunning = true;
-		this->thread = std::thread( &State::threadloop, this );
-	}
+	this->threadRunning = true;
+	this->thread = std::thread( &State::threadloop, this );
+}
 
-	void State::StopThread()
-	{
-		if ( !this->threadRunning )
-			return;
+void State::StopThread()
+{
+	if ( !this->threadRunning )
+		return;
 
-		this->threadRunning = false;
-		this->thread.join();
-	}
+	this->threadRunning = false;
+	this->thread.join();
+}
 
-	void State::requestStackPush( const stateID_t id )
-	{
-		this->stateStack.Push( std::move( id ) );
-	}
+void State::requestStackPush( const stateID_t id )
+{
+	this->stateStack.Push( std::move( id ) );
+}
 
-	void State::requestStackPop()
-	{
-		this->stateStack.Pop();
-	}
+void State::requestStackPop()
+{
+	this->stateStack.Pop();
+}
 
-	bool State::imStateOnTopOfTheStack()
-	{
-		return this->stateStack.GetStateOnTop() == this->GetID();
-	}
+bool State::imStateOnTopOfTheStack()
+{
+	return this->stateStack.GetStateOnTop() == this->GetID();
+}
 
-	stateID_t State::getStateOnTopOfTheStack()
-	{
-		return this->stateStack.GetStateOnTop();
-	}
+stateID_t State::getStateOnTopOfTheStack()
+{
+	return this->stateStack.GetStateOnTop();
+}
 
-	void State::threadloop()
-	{
-		while ( this->threadRunning )
-			this->UpdateThread();
-	}
+void State::threadloop()
+{
+	while ( this->threadRunning )
+		this->UpdateThread();
+}
 }

@@ -11,48 +11,46 @@
 #include <Core/Context.hpp>
 #include <Core/ecs/EntityManager.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Calls FixedUpdate and Update on every entity with ScriptComponent.
+
+===============================================================================
+*/
+class ScriptUpdateSystem final :
+	public System
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Calls FixedUpdate and Update on every entity with ScriptComponent.
+public:
+	ScriptUpdateSystem( Context cont ) :
+		System( std::move( cont ) )
+	{}
 
-	===============================================================================
-	*/
-	class ScriptUpdateSystem final :
-		public System
+	systemID_t GetID() const override
 	{
-	public:
-		ScriptUpdateSystem( Context cont ) :
-			System( std::move( cont ) )
-		{}
+		return systemID_t( coreSystems_t::SCRIPT_UPDATE );
+	}
 
-		systemID_t GetID() const override
-		{
-			return systemID_t( coreSystems_t::SCRIPT_UPDATE );
+	void Init() override
+	{
+		this->signature = createComponentSignature( getComponentTypeID<ScriptComponent>() );
+	}
+
+	void Update() override
+	{
+		auto vec = this->context.entityManager->GetEntitiesWithSignature( this->signature );
+
+		for ( auto entity : vec ) {
+			auto& scriptComponent = entity->GetComponent<ScriptComponent>();
+
+			scriptComponent.FixedUpdate();
+			if ( entity->IsAlive() && entity->IsActive() )
+				scriptComponent.Update();
 		}
+	}
 
-		void Init() override
-		{
-			this->signature = createComponentSignature( getComponentTypeID<ScriptComponent>() );
-		}
-
-		void Update() override
-		{
-			auto vec = this->context.entityManager->GetEntitiesWithSignature( this->signature );
-
-			for ( auto entity : vec )
-			{
-				auto& scriptComponent = entity->GetComponent<ScriptComponent>();
-
-				scriptComponent.FixedUpdate();
-				if ( entity->IsAlive() && entity->IsActive() )
-					scriptComponent.Update();
-			}
-		}
-
-	private:
-		componentBitset_t signature;
-	};
+private:
+	componentBitset_t signature;
+};
 }

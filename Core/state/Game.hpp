@@ -17,79 +17,78 @@
 #include <Core/ecs/EntityFactory.hpp>
 #include <Core/ecs/Messaging.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Game class is a wrapper for State Machine. It does Settings loading and
+	creates window.
+
+===============================================================================
+*/
+class Game final
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Game class is a wrapper for State Machine. It does Settings loading and
-		creates window.
+public:
+	Game( std::string settPath );
+	~Game();
 
-	===============================================================================
-	*/
-	class Game final
+	template <typename T, typename... TArgs>
+	void AddSystem( TArgs&&... args )
 	{
-	public:
-		Game( std::string settPath );
-		~Game();
+		CON_STATIC_ASSERT( std::is_base_of_v<System, T>, "T must inherit from System" );
 
-		template <typename T, typename... TArgs>
-		void AddSystem( TArgs&&... args )
+		auto sys = std::make_unique<T>( this->context, std::forward<TArgs>( args )... );
+		sys->Init();
+		this->systems.push_back( std::move( sys ) );
+	}
+
+	void RemoveSystem( const systemID_t id )
+	{
+		this->systems.erase(
+			std::remove_if( std::begin( this->systems ), std::end( this->systems ),
+			[id]( auto& system )
 		{
-			CON_STATIC_ASSERT( std::is_base_of_v<System, T>, "T must inherit from System" );
+			return id == system->GetID();
+		} ), std::end( this->systems ) );
+	}
 
-			auto sys = std::make_unique<T>( this->context, std::forward<TArgs>( args )... );
-			sys->Init();
-			this->systems.push_back( std::move( sys ) );
-		}
+	template <typename T, typename... TArgs>
+	void RegisterState( const stateID_t id, TArgs&&... args )
+	{
+		this->stateStack.RegisterState<T>( std::move( id ), std::forward<TArgs>( args )... );
+	}
 
-		void RemoveSystem( const systemID_t id )
-		{
-			this->systems.erase(
-				std::remove_if( std::begin( this->systems ), std::end( this->systems ),
-					[id]( auto& system )
-			{
-				return id == system->GetID();
-			} ), std::end( this->systems ) );
-		}
+	Context GetContext() const
+	{
+		return this->context;
+	}
 
-		template <typename T, typename... TArgs>
-		void RegisterState( const stateID_t id, TArgs&&... args )
-		{
-			this->stateStack.RegisterState<T>( std::move( id ), std::forward<TArgs>( args )... );
-		}
+	void Exit()
+	{
+		this->exit = true;
+	}
 
-		Context GetContext() const
-		{
-			return this->context;
-		}
+	void Run( const stateID_t initState );
 
-		void Exit()
-		{
-			this->exit = true;
-		}
+private:
+	sf::RenderWindow window;
+	EntityManager entityManager;
+	ResourceHolder resourceCache;
+	Settings settings;
+	EntityFactory entityFactory;
+	StateStack stateStack;
+	Messenger messenger;
+	Context context;
+	std::vector<std::unique_ptr<System>> systems;
+	bool exit;
+	std::string settingsPath;
 
-		void Run( const stateID_t initState );
+	void pollEvents();
+	void update();
 
-	private:
-		sf::RenderWindow window;
-		EntityManager entityManager;
-		ResourceHolder resourceCache;
-		Settings settings;
-		EntityFactory entityFactory;
-		StateStack stateStack;
-		Messenger messenger;
-		Context context;
-		std::vector<std::unique_ptr<System>> systems;
-		bool exit;
-		std::string settingsPath;
-
-		void pollEvents();
-		void update();
-
-		void assignContextPointers();
-		void configureFromSettings();
-		void registerDefaultStates();
-		void addDefaultSystems();
-	};
+	void assignContextPointers();
+	void configureFromSettings();
+	void registerDefaultStates();
+	void addDefaultSystems();
+};
 }

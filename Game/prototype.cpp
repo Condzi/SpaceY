@@ -26,8 +26,7 @@ int main()
 	init();
 	workInit();
 
-	while ( window.isOpen() )
-	{
+	while ( window.isOpen() ) {
 		pollEvent();
 		workUpdate();
 		draw();

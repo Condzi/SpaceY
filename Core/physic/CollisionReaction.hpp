@@ -7,12 +7,10 @@
 
 #include <Core/components/SimpleBody.hpp>
 
-namespace con
-{
-	// Contains functions that should be called in OnCollision method in Script.
-	namespace CollisionReaction
-	{
-		void CorrectPositionAfterCollision( SimpleBodyComponent& first, const SimpleBodyComponent& second, collisionSide_t side );
-		void StopInCollisionAxis( SimpleBodyComponent& body, collisionSide_t side );
-	}
+namespace con {
+// Contains functions that should be called in OnCollision method in Script.
+namespace CollisionReaction {
+void CorrectPositionAfterCollision( SimpleBodyComponent& first, const SimpleBodyComponent& second, collisionSide_t side );
+void StopInCollisionAxis( SimpleBodyComponent& body, collisionSide_t side );
+}
 }

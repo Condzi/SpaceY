@@ -13,6 +13,7 @@ using namespace con::experimental;
 int main()
 {
 	std::cout << DefaultSettings<SETTINGS_DEFAULT_ENGINE>::Get( "WINDOW", "FPS" );
+	std::cout << '\n' << std::string::npos;
 
 	std::cin.get();
 }

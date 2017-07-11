@@ -8,44 +8,43 @@
 #include <Core/logger/Logger.hpp>
 #include <Core/Settings.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Renderer uses a component blocks of DrawableCompoents. You should get them
+	using Reserve method in ecs::World. Pass them directly here. Don't
+	clear or display using sf::RenderWindow* in Context, Game class will handle
+	everything.
+
+===============================================================================
+*/
+class Renderer final :
+	public System
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Renderer uses a component blocks of DrawableCompoents. You should get them
-		using Reserve method in ecs::World. Pass them directly here. Don't
-		clear or display using sf::RenderWindow* in Context, Game class will handle
-		everything.
+public:
+	Renderer( Context cont ) :
+		System( std::move( cont ) )
+	{}
 
-	===============================================================================
-	*/
-	class Renderer final :
-		public System
+	systemID_t GetID() const override
 	{
-	public:
-		Renderer( Context cont ) :
-			System( std::move( cont ) )
-		{}
+		return systemID_t( coreSystems_t::RENDERER );
+	}
 
-		systemID_t GetID() const override
-		{
-			return systemID_t( coreSystems_t::RENDERER );
-		}
+	void Init() override
+	{
+		this->signature = createComponentSignature( getComponentTypeID<DrawableComponent>() );
+	}
 
-		void Init() override
-		{
-			this->signature = createComponentSignature( getComponentTypeID<DrawableComponent>() );
-		}
+	void Update() override;
 
-		void Update() override;
+private:
+	componentBitset_t signature;
+	sf::View view;
 
-	private:
-		componentBitset_t signature;
-		sf::View view;
-
-		std::vector<DrawableComponent*> getDrawables();
-		// Call when resizing a window.
-		void updateView();
-	};
+	std::vector<DrawableComponent*> getDrawables();
+	// Call when resizing a window.
+	void updateView();
+};
 }

@@ -13,43 +13,42 @@
 #include <Core/ecs/Entity.hpp>
 #include <Core/Context.hpp>
 
-namespace con
+namespace con {
+/*
+===============================================================================
+Created by: Condzi
+	Inherits from ScriptComponent; gives you acces to OnButtonClick method.
+	Its Update method detects if button is clicked and calls OnButtonClick.
+
+===============================================================================
+*/
+struct ButtonScript :
+	ScriptComponent
 {
-	/*
-	===============================================================================
-	Created by: Condzi
-		Inherits from ScriptComponent; gives you acces to OnButtonClick method.
-		Its Update method detects if button is clicked and calls OnButtonClick.
+	virtual void OnButtonClick() {}
 
-	===============================================================================
-	*/
-	struct ButtonScript :
-		ScriptComponent
+	void Update() override
 	{
-		virtual void OnButtonClick() {}
+		auto mousePos = this->context.window->mapPixelToCoords( sf::Mouse::getPosition( *this->context.window ) );
+		auto& drawableComponent = this->entity->GetComponent<DrawableComponent>();
+		// IDEA: Move this code to InitBounds or something?
 
-		void Update() override
-		{
-			auto mousePos = this->context.window->mapPixelToCoords( sf::Mouse::getPosition( *this->context.window ) );
-			auto& drawableComponent = this->entity->GetComponent<DrawableComponent>();
-			// IDEA: Move this code to InitBounds or something?
+		sf::FloatRect buttonBounds( 0, 0, 0, 0 );
 
-			sf::FloatRect buttonBounds( 0, 0, 0, 0 );
+		if ( !drawableComponent.object.GetAsDrawable() )
+			LOG( "Drawable not set for button", WARNING, BOTH );
+		else if ( drawableComponent.object.GetAsText() )
+			buttonBounds = getRealTextBounds( *drawableComponent.object.GetAsText() );
+		else if ( drawableComponent.object.GetAsSprite() )
+			buttonBounds = ( drawableComponent.object.GetAsSprite() )->getGlobalBounds();
+		else if ( drawableComponent.object.GetAsRectShape() )
+			buttonBounds = ( drawableComponent.object.GetAsRectShape() )->getGlobalBounds();
+		else if ( drawableComponent.object.GetAsCircleShape() )
+			buttonBounds = ( drawableComponent.object.GetAsCircleShape() )->getGlobalBounds();
 
-			if ( !drawableComponent.object.GetAsDrawable() )
-				LOG( "Drawable not set for button", WARNING, BOTH );
-			else if ( drawableComponent.object.GetAsText() )
-				buttonBounds = getRealTextBounds( *drawableComponent.object.GetAsText() );
-			else if ( drawableComponent.object.GetAsSprite() )
-				buttonBounds = ( drawableComponent.object.GetAsSprite() )->getGlobalBounds();
-			else if ( drawableComponent.object.GetAsRectShape() )
-				buttonBounds = ( drawableComponent.object.GetAsRectShape() )->getGlobalBounds();
-			else if ( drawableComponent.object.GetAsCircleShape() )
-				buttonBounds = ( drawableComponent.object.GetAsCircleShape() )->getGlobalBounds();
-
-			if ( buttonBounds.contains( mousePos.x, mousePos.y ) &&
-				sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
-				this->OnButtonClick();
-		}
-	};
+		if ( buttonBounds.contains( mousePos.x, mousePos.y ) &&
+			 sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
+			this->OnButtonClick();
+	}
+};
 }

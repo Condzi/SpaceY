@@ -31,31 +31,26 @@ int main()
 			game.Run( STATE_LOADING_SCREEN );
 		}
 	#if !defined DEBUG
-		catch ( BaseException& baseException )
-		{
+		catch ( BaseException& baseException ) {
 			LOG( "Base Exception (assert) thrown.", ERROR, BOTH );
 			showBasicExceptionData( baseException );
 			exitProperly = false;
 		}
-		catch ( std::runtime_error& runtime )
-		{
+		catch ( std::runtime_error& runtime ) {
 			LOG( "Runtime Exception thrown.", ERROR, BOTH );
 			LOG( "Exception data: \"" << runtime.what() << "\"", ERROR, BOTH );
 			exitProperly = false;
 		}
-		catch ( std::exception& ex )
-		{
+		catch ( std::exception& ex ) {
 			LOG( "Exception thrown.", ERROR, BOTH );
 			LOG( "Exception data: \"" << ex.what() << "\"", ERROR, BOTH );
 			exitProperly = false;
 		}
 
-		if ( !exitProperly )
-		{
+		if ( !exitProperly ) {
 			LOG( "Press enter to exit.", INFO, CONSOLE );
 			std::cin.get();
-		} else
-		{
+		} else {
 			LOG( "Game exited properly.", INFO, BOTH );
 		}
 	}

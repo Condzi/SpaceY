@@ -15,37 +15,36 @@
 #include <Core/resourceManaging/ResourceWrapper.hpp>
 #include <Core/Config.hpp>
 
-namespace con
+namespace con {
+using textureResource_t = ResourceWrapper<sf::Texture>;
+using fontResource_t = ResourceWrapper<sf::Font>;
+using uiTextResource_t = ResourceWrapper<sf::Text>;
+
+// TODO: Use same trick like in DrawableComponent (with template method to get resources)
+/*
+===============================================================================
+Created by: Condzi
+	Resource Holder struct is created for resource managing. To add resources
+	use public vectors. For deleting use specified DeleteAll... methods. To get
+	resource, use Get... methods.
+
+===============================================================================
+*/
+struct ResourceHolder final
 {
-	using textureResource_t = ResourceWrapper<sf::Texture>;
-	using fontResource_t = ResourceWrapper<sf::Font>;
-	using uiTextResource_t = ResourceWrapper<sf::Text>;
+	std::vector<std::unique_ptr<textureResource_t>> textures;
+	std::vector<std::unique_ptr<uiTextResource_t>> uiTexts;
+	std::vector<std::unique_ptr<fontResource_t>> fonts;
 
-	// TODO: Use same trick like in DrawableComponent (with template method to get resources)
-	/*
-	===============================================================================
-	Created by: Condzi
-		Resource Holder struct is created for resource managing. To add resources
-		use public vectors. For deleting use specified DeleteAll... methods. To get
-		resource, use Get... methods.
+	textureResource_t* GetTexture( const resourceID_t id ) const;
+	uiTextResource_t* GetText( const resourceID_t id ) const;
+	fontResource_t* GetFont( const resourceID_t id ) const;
+	std::vector<textureResource_t*> GetAllTexturesByID( const resourceID_t id ) const;
+	std::vector<uiTextResource_t*> GetAllTextsByID( const resourceID_t id ) const;
+	std::vector<fontResource_t*> GetAllFontsByID( const resourceID_t id ) const;
 
-	===============================================================================
-	*/
-	struct ResourceHolder final
-	{
-		std::vector<std::unique_ptr<textureResource_t>> textures;
-		std::vector<std::unique_ptr<uiTextResource_t>> uiTexts;
-		std::vector<std::unique_ptr<fontResource_t>> fonts;
-
-		textureResource_t* GetTexture( const resourceID_t id ) const;
-		uiTextResource_t* GetText( const resourceID_t id ) const;
-		fontResource_t* GetFont( const resourceID_t id ) const;
-		std::vector<textureResource_t*> GetAllTexturesByID( const resourceID_t id ) const;
-		std::vector<uiTextResource_t*> GetAllTextsByID( const resourceID_t id ) const;
-		std::vector<fontResource_t*> GetAllFontsByID( const resourceID_t id ) const;
-
-		void DeleteAllResources();
-		void DeleteAllResourcesByPriority( const resourcePriorityID_t priority );
-		void DeleteAllResourcesByID( const resourceID_t id );
-	};
+	void DeleteAllResources();
+	void DeleteAllResourcesByPriority( const resourcePriorityID_t priority );
+	void DeleteAllResourcesByID( const resourceID_t id );
+};
 }

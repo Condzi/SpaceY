@@ -12,8 +12,12 @@ using namespace con::experimental;
 
 int main()
 {
-	std::cout << DefaultSettings<SETTINGS_DEFAULT_ENGINE>::Get( "WINDOW", "FPS" );
-	std::cout << '\n' << std::string::npos;
+	Settings<SETTINGS_ENGINE> engineSettings;
+
+	if ( !engineSettings.Load( "engine.ini" ) || !engineSettings.DoesMatchWithDefault())
+		engineSettings.CreateDefault();
+
+	std::cout<< *engineSettings.Get( "WINDOW", "TITLE" );
 
 	std::cin.get();
 }

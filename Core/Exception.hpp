@@ -14,19 +14,19 @@ namespace con {
 /*
 ===============================================================================
 Created by: Condzi
-	Base class that is used for exceptions and asserations.
+	Base class that is used for exceptions and assertions.
 
 ===============================================================================
 */
-class BaseException
+class BasicException
 {
 public:
-	BaseException( std::string wFile, std::string wFunction, uint32_t wLine, std::string wCondition, std::string wMessage ) :
+	BasicException( std::string wFile, std::string wFunction, uint32_t wLine, std::string wCondition, std::string wMessage ) :
 		file( std::move( wFile ) ), function( std::move( wFunction ) ), condition( std::move( wCondition ) ), message( std::move( wMessage ) ),
 		line( std::move( wLine ) )
 	{}
-	virtual ~BaseException() = default;
-	BaseException operator=( const BaseException& ) = delete;
+	virtual ~BasicException() = default;
+	BasicException operator=( const BasicException& ) = delete;
 
 	const std::string File() const
 	{
@@ -54,7 +54,7 @@ private:
 	const std::string file, function, condition, message;
 };
 
-inline void showBasicExceptionData( const BaseException& baseException )
+inline void showBasicExceptionData( const BasicException& baseException )
 {
 	LOG( "File: " << baseException.File(), ERROR, BOTH );
 	LOG( "Function: " << baseException.Function(), ERROR, BOTH );

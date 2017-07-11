@@ -13,8 +13,8 @@ namespace experimental {
 template <typename T>
 struct constexprArray_t final
 {
-	typedef uint16_t storage_type;
-	typedef T data_type;
+	using storage_type = uint16_t;
+	using data_type = T;
 
 	const data_type* data;
 	storage_type size;
@@ -74,6 +74,11 @@ struct constexprRecord_t final // compile time version of INIFile::record_t
 		name( std::move( _name ) ),
 		value( std::move( _value ) )
 	{}
+
+	const bool SkipWhenSaving() const
+	{
+		return this->section.size == 0 || this->name.size == 0 || this->value.size == 0;
+	}
 
 	constexpr bool operator==( const constexprRecord_t& second ) const
 	{

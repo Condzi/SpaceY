@@ -15,7 +15,7 @@
 { \
 	if(! ( condition ) ) \
 	{ \
-		throw con::BaseException( __FILE__, __func__, __LINE__, #condition, message );\
+		throw con::BasicException( __FILE__, __func__, __LINE__, #condition, message );\
 	} \
 }
 

@@ -100,7 +100,7 @@ namespace internal
 		bool doesMatchWithDefault( INIFile& file )
 		{
 			for ( auto& record : Settings<settingsDefaultType>::records )
-				if ( !file.GetValuePtr( record.section.data, record.name.data ) )
+				if ( !record.SkipWhenSaving() && !file.GetValuePtr( record.section.data, record.name.data ) )
 					return false;
 
 			return true;

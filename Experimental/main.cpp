@@ -25,13 +25,17 @@ struct Settings<SETTINGS_DEFAULT_GAME> final
 
 int main()
 {
-	Settings<SETTINGS_GAME> engineSettings;
+	//Settings<SETTINGS_GAME> engineSettings;
 
-	if ( !engineSettings.Load( "game.ini" ) || !engineSettings.DoesMatchWithDefault() )
-		engineSettings.CreateDefault();
+	//if ( !engineSettings.Load( "game.ini" ) || !engineSettings.DoesMatchWithDefault() )
+	//	engineSettings.CreateDefault();
 
-	//*engineSettings.Get( "PLAYER", "POSITION_X" ) = parser::valToStr( 512 );
-	std::cout << *engineSettings.Get( "PLAYER", "POSITION_X" );
-	engineSettings.SaveCurrent();
+	////*engineSettings.Get( "PLAYER", "POSITION_X" ) = parser::valToStr( 512 );
+	//std::cout << *engineSettings.Get( "PLAYER", "POSITION_X" );
+	//engineSettings.SaveCurrent();
+
+	std::cout << conversions::To<std::string>( 123 ) << '\n';
+	std::cout << conversions::To<std::string>( 12.2 ) << '\n';
+	std::cout << conversions::To<float>( "150.254" ) << '\n';
 	std::cin.get();
 }

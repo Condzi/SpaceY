@@ -42,9 +42,9 @@ public:
 		laptopSprite->setScale( lapScale, lapScale );
 		laptopSprite->setPosition( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2.0f - laptopSprite->getGlobalBounds().width / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.0f - laptopSprite->getGlobalBounds().height / 2 );
 
-		auto& console = this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
+		this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 
-		this->addTexts( console.GetComponent<ConsoleScript>(), ( Vec2f( laptopSprite->getPosition() ) + 16 * lapScale ) );
+		this->addTexts( ( Vec2f( laptopSprite->getPosition() ) + 16 * lapScale ) );
 	}
 
 	void OnPop() override
@@ -55,13 +55,13 @@ public:
 		this->context.resourceCache->DeleteAllResourcesByPriority( RESOURCE_PLAY_CONSOLE );
 	}
 
-	void Update()
+	void Update() override
 	{}
 
 private:
 	// TODO: Later create structure to hold information about console.
 	// How big the screen is, what font is used - this is needed for rendering. 
-	void addTexts( ConsoleScript& consoleScript, const Vec2f startPosition )
+	void addTexts( const Vec2f startPosition )
 	{
 		const auto& font = *this->context.resourceCache->GetFont( FONT_CONSOLAS );
 		const float offset = 1.0f;

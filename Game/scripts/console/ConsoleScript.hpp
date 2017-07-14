@@ -24,7 +24,7 @@ namespace con {
 struct ConsoleScript final :
 	ScriptComponent
 {
-	typedef Message<consoleMessage_t> logMessage_t;
+	using logMessage_t = Message<consoleMessage_t>;
 
 	void Init() override
 	{
@@ -45,7 +45,7 @@ struct ConsoleScript final :
 
 		bool logsNeedUpdate = false;
 		if ( !logsToAdd.empty() ) {
-			this->handleLogAdd( std::move( logsToAdd ) );
+			this->handleLogAdd( logsToAdd );
 			logsNeedUpdate = true;
 		}
 		if ( wheelDelta ) {
@@ -60,7 +60,7 @@ struct ConsoleScript final :
 private:
 	std::array<consoleMessage_t, CONSOLE_CAPACITY> logs;
 	componentBitset_t signature;
-	// If we have id of log on top we can easly calculate interval of logs to draw.
+	// If we have id of log on top we can easily calculate interval of logs to draw.
 	uint8_t logOnTop;
 
 	void handleLogAdd( std::vector<logMessage_t*>& logsToAdd )
@@ -90,9 +90,9 @@ private:
 	{
 		auto textEntities = this->context.entityManager->GetEntitiesWithSignature( this->signature );
 		textEntities.erase( std::remove_if( textEntities.begin(), textEntities.end(),
-							[]( Entity* entity )
+							[]( Entity* e )
 		{
-			return entity->GetComponent<EntityTagComponent>().tag != ENTITY_TEXT_CONSOLE;
+			return e->GetComponent<EntityTagComponent>().tag != ENTITY_TEXT_CONSOLE;
 		}
 		), textEntities.end() );
 

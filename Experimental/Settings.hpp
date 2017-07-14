@@ -15,7 +15,8 @@
 namespace con {
 namespace experimental {
 
-enum settings_t : uint8_t
+using settingsID_t = int8_t;
+enum settings_t : settingsID_t
 {
 	SETTINGS_DEFAULT_ENGINE,
 	SETTINGS_DEFAULT_GAME,
@@ -60,11 +61,11 @@ namespace internal
 	};
 	// TODO: Move to Assert.hpp ?
 #define CON_THROW( message, exceptionClass ) \
-	throw exceptionClass(__FILE__, __func__, __LINE__, message )
+	throw exceptionClass( __FILE__, __func__, __LINE__, message )
 
 	struct SettingsInterface
 	{
-		virtual bool Load( const std::string path )
+		virtual bool Load( const std::string& path )
 		{
 			CON_UNUSED_PARAM( path );
 			CON_THROW( "method specially not implemented, don't use it", NotImplemented );
@@ -96,21 +97,21 @@ namespace internal
 			file.Parse();
 			return true;
 		}
-		template <settings_t settingsDefaultType>
+		template <settingsID_t defaultSettingsID>
 		bool doesMatchWithDefault( INIFile& file )
 		{
-			for ( auto& record : Settings<settingsDefaultType>::records )
+			for ( auto& record : Settings<defaultSettingsID>::records )
 				if ( !record.SkipWhenSaving() && !file.GetValuePtr( record.section.data, record.name.data ) )
 					return false;
 
 			return true;
 		}
-		template <settings_t settingsDefaultType>
+		template <settingsID_t defaultSettingsID>
 		bool createDefault( INIFile& file )
 		{
 			file.Clear();
 
-			for ( auto& record : Settings<settingsDefaultType>::records )
+			for ( auto& record : Settings<defaultSettingsID>::records )
 				if ( !record.SkipWhenSaving() )
 					file.AddValue( record.section.data, record.name.data, record.value.data );
 
@@ -119,7 +120,7 @@ namespace internal
 	};
 }
 // Dummy
-template <settings_t T>
+template <settingsID_t T>
 struct Settings final :
 	internal::SettingsInterface
 {};
@@ -148,7 +149,7 @@ template<>
 struct Settings<SETTINGS_ENGINE> final :
 	internal::SettingsInterface
 {
-	bool Load( const std::string path ) override
+	bool Load( const std::string& path ) override
 	{
 		return this->load( path, this->file );
 	}
@@ -181,7 +182,7 @@ template<>
 struct Settings<SETTINGS_GAME> final :
 	internal::SettingsInterface
 {
-	bool Load( const std::string path ) override
+	bool Load( const std::string& path ) override
 	{
 		return this->load( path, this->file );
 	}

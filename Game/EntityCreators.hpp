@@ -26,6 +26,8 @@ struct TextConsoleCreator final :
 
 	void CreateEntity( Entity& entity, Context& context ) override
 	{
+		CON_UNUSED_PARAM( context );
+
 		entity.AddComponent<PositionComponent>();
 		entity.AddComponent<DrawableComponent>().drawLayer = LAYER_TEXT;
 		entity.AddComponent<EntityTagComponent>().tag = ENTITY_TEXT_CONSOLE;
@@ -43,6 +45,7 @@ struct DrawableEntityCreator final :
 
 	void CreateEntity( Entity& entity, Context& context ) override
 	{
+		CON_UNUSED_PARAM( context );
 		//	entity.AddComponent<PositionComponent>();
 		entity.AddComponent<DrawableComponent>();
 		entity.AddComponent<EntityTagComponent>().tag = ENTITY_SPRITE;

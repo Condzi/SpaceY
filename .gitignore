@@ -45,9 +45,6 @@ UpgradeLog*.htm
 *.user
 
 *.dll
-*.txt
-# settings.ini is replaced by engine.ini
-settings.ini
-engine.ini
 *.props
+*.txt
 

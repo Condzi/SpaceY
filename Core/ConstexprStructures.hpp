@@ -9,7 +9,13 @@
 
 namespace con {
 
-// TODO: Add comments.
+/*
+===============================================================================
+Created by: Condzi
+	Compile time array. Used by constexprString_t.
+
+===============================================================================
+*/
 template <typename T>
 struct constexprArray_t final
 {
@@ -49,7 +55,13 @@ inline std::ostream& operator<<( std::ostream& stream, const constexprString_t& 
 	return stream << str.data;
 }
 
-// TODO: Add comments.
+/*
+===============================================================================
+Created by: Condzi
+	Finds something in interval of poitners using tester lambda.
+
+===============================================================================
+*/
 template <typename It, typename Lambda>
 constexpr It constexprFindIf( const It& b, const It& e, const Lambda& tester )
 {
@@ -64,7 +76,13 @@ constexpr It constexprFindIf( const It& b, const It& e, const Lambda& tester )
 	return begin;
 }
 
-// TODO: Add comments.
+/*
+===============================================================================
+Created by: Condzi
+	Three constexprString_t values used by Settings class.
+
+===============================================================================
+*/
 struct constexprRecord_t final // compile time version of INIFile::record_t
 {
 	constexprString_t section, name, value;

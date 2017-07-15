@@ -10,7 +10,15 @@
 
 namespace con {
 
-// TODO: Add comments.
+/*
+===============================================================================
+Created by : Condzi
+	Class created for manipulating INI files. Remember that you must Parse the 
+	file after you open it. If you leave Save() to default it will override 
+	opened file.
+
+===============================================================================
+*/
 class INIFile final
 {
 	struct record_t

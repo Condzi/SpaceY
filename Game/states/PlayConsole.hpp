@@ -38,9 +38,9 @@ public:
 
 		laptopSprite->setTexture( *this->context.resourceCache->GetTexture( TEXTURE_ATLAS ) );
 		laptopSprite->setTextureRect( { 0, 0, 352, 357 } );
-		float lapScale = this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 357.0f;
+		float lapScale = /*this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" )*/1080 / 357.0f;
 		laptopSprite->setScale( lapScale, lapScale );
-		laptopSprite->setPosition( this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ) / 2.0f - laptopSprite->getGlobalBounds().width / 2, this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) / 2.0f - laptopSprite->getGlobalBounds().height / 2 );
+		laptopSprite->setPosition( /*this->context.settings->GetInt( "WINDOW", "DESIGNED_X" )*/1920 / 2.0f - laptopSprite->getGlobalBounds().width / 2, /*this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" )*/1080 / 2.0f - laptopSprite->getGlobalBounds().height / 2 );
 
 		this->context.entityFactory->CreateEntity( this->context.entityManager->CreateEntity(), ENTITY_CONSOLE, this->context );
 

@@ -7,17 +7,13 @@
 #include <Core/Config.hpp>
 
 namespace con {
-Game::Game( std::string settPath ) :
-	settingsPath( std::move( settPath ) )
+Game::Game()
 {
 	LOG( "Game ctor; application start", INFO, BOTH );
+
 	this->assignContextPointers();
 
-	if ( !this->settings.LoadFromFile( this->settingsPath ) )
-		this->settings.GenerateDefault( this->settingsPath );
-	else
-		this->settings.Parse();
-
+	this->loadSettings();
 	this->configureFromSettings();
 
 	this->addDefaultSystems();
@@ -27,7 +23,8 @@ Game::Game( std::string settPath ) :
 Game::~Game()
 {
 	LOG( "Saving settings...", INFO, BOTH );
-	this->settings.SaveToFile( this->settingsPath, "; Default config. Don't change if you don't know what are you doing!" );
+	this->settingsEngine.Save();
+	this->settingsGame.Save();
 	LOG( "Cleaning up...", INFO, BOTH );
 	this->resourceCache.DeleteAllResources();
 }
@@ -81,47 +78,52 @@ void Game::assignContextPointers()
 	this->context.window = &this->window;
 	this->context.entityManager = &this->entityManager;
 	this->context.resourceCache = &this->resourceCache;
-	this->context.settings = &this->settings;
+	this->context.settingsEngine = &this->settingsEngine;
+	this->context.settingsGame = &this->settingsGame;
 	this->context.entityFactory = &this->entityFactory;
 	this->context.stateStack = &this->stateStack;
 	this->context.messenger = &this->messenger;
+
 	this->stateStack.SetContext( this->context );
+}
+
+void Game::loadSettings()
+{
+	this->settingsEngine.Load( PATH_ENGINE_SETTINGS );
+	if ( !this->settingsEngine.DoesMatchWithDefault() ) {
+		LOG( "Generating default engine settings", INFO, CONSOLE );
+		this->settingsEngine.CreateDefault();
+	}
+
+	this->settingsGame.Load( PATH_GAME_SETTINGS );
+	if ( !this->settingsGame.DoesMatchWithDefault() ) {
+		LOG( "Generating default game settings", INFO, CONSOLE );
+		this->settingsGame.CreateDefault();
+	}
 }
 
 void Game::configureFromSettings()
 {
-	INIError_t error;
+	auto winX = To<uint32_t>( *this->settingsEngine.Get( "WINDOW", "SIZE_X" ) );
+	auto winY = To<uint32_t>( *this->settingsEngine.Get( "WINDOW", "SIZE_Y" ) );
+	auto winTitlePtr = this->settingsGame.Get( "DEFAULT", "NAME" );
+	auto winTitle = winTitlePtr ? *winTitlePtr : "ConEngine";
+	auto fps = To<uint32_t>( *this->settingsEngine.Get( "WINDOW", "FPS" ) );
 
-	this->window.create(
-	{ static_cast<uint32_t>( this->settings.GetInt( "WINDOW", "X", &error ) ),
-		static_cast<uint32_t>( this->settings.GetInt( "WINDOW", "Y", &error ) ) },
-		this->settings.GetString( "WINDOW", "TITLE", &error ),
-		sf::Style::Close | sf::Style::Resize );
-	this->window.setFramerateLimit( this->settings.GetInt( "WINDOW", "FPS", &error ) );
+	this->window.create( { winX, winY }, winTitle, sf::Style::Close | sf::Style::Resize );
+	this->window.setFramerateLimit( fps );
 
-	// IDEA: Move later to Settings::CheckAreDefaultInitialized or something.
-	this->settings.GetInt( "PHYSIC", "UPS", &error );
-	this->settings.GetString( "WINDOW", "TITLE", &error );
-	this->settings.GetInt( "WINDOW", "FPS", &error );
-	this->settings.GetInt( "WINDOW", "X", &error );
-	this->settings.GetInt( "WINDOW", "Y", &error );
-	this->settings.GetInt( "WINDOW", "DESIGNED_X", &error );
-	this->settings.GetInt( "WINDOW", "DESIGNED_Y", &error );
-	this->settings.GetInt( "SOUND", "VOLUME", &error );
-
-	if ( !error.what.empty() ) {
-		LOG( "One or more errors occured loading basic engine settings, generating default.", WARNING, BOTH );
-		this->settings.GenerateDefault( this->settingsPath );
-		this->configureFromSettings();
-	}
 }
 
 void Game::registerDefaultStates()
 {
-	this->RegisterState<ExitState>( (stateID_t)coreStates_t::EXIT );
-	if ( this->GetContext().settings->GetBool( "DEBUG", "DEBUG_DATA" ) ) {
-		this->RegisterState<DebugDataState>( (stateID_t)coreStates_t::DEBUG_DATA );
-		this->stateStack.Push( (stateID_t)coreStates_t::DEBUG_DATA );
+	auto debugStrVal = this->settingsEngine.Get( "DEBUG", "DEBUG_DATA" );
+	bool addDebugDataState = debugStrVal != nullptr ? To<bool>( *debugStrVal ) : false;
+
+	this->RegisterState<ExitState>( To<stateID_t>( coreStates_t::EXIT ) );
+	if ( addDebugDataState ) {
+		this->RegisterState<DebugDataState>( To<stateID_t>( coreStates_t::DEBUG_DATA ) );
+		this->stateStack.Push( To<stateID_t>( coreStates_t::DEBUG_DATA ) );
 	}
 }
 

@@ -6,7 +6,7 @@
 #pragma once
 
 #include <Core/ecs/Config.hpp>
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 #include <Core/components/Script.hpp>
 
 namespace con {

@@ -5,18 +5,17 @@
 
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <string>
 #include <cinttypes>
 
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
+#include <Core/Config.hpp>
 
 // IDEA: Figure out how to disable or fix E0904, E0493 errors
 
 namespace con {
-namespace experimental {
-namespace conversions {
-
 namespace internal {
 
 	// TODO: Change enable_if to if constexpr
@@ -122,6 +121,18 @@ inline double To<double, std::string>( const std::string& src )
 	return std::stod( src );
 }
 
+template<>
+inline bool To<bool, std::string>( const std::string& src )
+{
+	std::string copy = src;
+	std::transform( copy.begin(), copy.end(), copy.begin(), ::tolower );
+
+	if ( copy == "false" || copy == "0" )
+		return false;
+
+	return true;
+}
+
 // const char* alternatives 
 
 template<>
@@ -177,6 +188,10 @@ inline double To<double, const char>( cstr_t src )
 {
 	return To<double>( std::string( src ) );
 }
-}
+
+template<>
+inline bool To<bool, const char>( cstr_t src )
+{
+	return To<bool>( std::string( src ) );
 }
 }

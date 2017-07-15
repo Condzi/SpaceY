@@ -15,14 +15,16 @@ class Text;
 }
 
 namespace con {
-constexpr const char* GAME_NAME = "SpaceY";
-// Amount of keys pressed / released stored in history
-constexpr uint8_t INPUT_KEY_HISTORY = 128;
 
-typedef int16_t stateID_t;
-typedef int8_t resourcePriorityID_t;
-typedef int8_t resourceID_t;
-typedef const char* cstr_t;
+using stateID_t = int16_t;
+using resourcePriorityID_t = int8_t;
+using resourceID_t = int8_t;
+using cstr_t = const char*;
+
+constexpr cstr_t PATH_ENGINE_SETTINGS = "engine.ini";
+constexpr cstr_t PATH_GAME_SETTINGS = "game.ini";
+constexpr uint8_t MAX_SETTINGS_RECORDS = 255;
+
 
 enum class coreStates_t : stateID_t
 {
@@ -47,6 +49,3 @@ enum class coreMessages_t : messageID_t
 // IDEA: Maybe move this to functions.hpp ?
 sf::Rect<float> getRealTextBounds( const sf::Text& text );
 }
-
-// IDEA: Maybe move this macro to Macros.hpp? Along with Assertions.
-#define CON_UNUSED_PARAM( x ) ( ( void )( x ) )

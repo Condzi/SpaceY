@@ -14,6 +14,7 @@
 #include <Core/time/Time.hpp>
 #include <Core/Context.hpp>
 #include <Core/Settings.hpp>
+#include <Core/Conversions.hpp>
 
 namespace con {
 /*
@@ -40,7 +41,7 @@ public:
 	void Init() override
 	{
 		this->signature = createComponentSignature( getComponentTypeID<SimpleBodyComponent>() );
-		this->ups = asSeconds( 1.0f / static_cast<uint8_t>( this->context.settings->GetInt( "PHYSIC", "UPS" ) ) );
+		this->ups = asSeconds( 1.0f / To<uint8_t>( *this->context.settingsEngine->Get( "PHYSIC", "UPS" ) ) );
 	}
 
 	void Update() override;

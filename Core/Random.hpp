@@ -8,7 +8,7 @@
 #include <random>
 #include <ctime>
 
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 
 namespace con {
 // Namespace for randomizing functions.

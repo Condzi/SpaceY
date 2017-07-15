@@ -8,7 +8,7 @@
 #include <Core/Config.hpp>
 
 namespace con {
-namespace experimental {
+
 // TODO: Add comments.
 template <typename T>
 struct constexprArray_t final
@@ -51,7 +51,7 @@ inline std::ostream& operator<<( std::ostream& stream, const constexprString_t& 
 
 // TODO: Add comments.
 template <typename It, typename Lambda>
-constexpr It constexprFindIf( const It& b, const It& e, Lambda tester )
+constexpr It constexprFindIf( const It& b, const It& e, const Lambda& tester )
 {
 	auto begin = b;
 	while ( begin != e ) {
@@ -85,5 +85,4 @@ struct constexprRecord_t final // compile time version of INIFile::record_t
 		return ( this->section == second.section ) && ( this->name == second.name );
 	}
 };
-}
 }

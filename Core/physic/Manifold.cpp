@@ -7,7 +7,7 @@
 #include <Core/components/SimpleBody.hpp>
 #include <Core/components/Script.hpp>
 #include <Core/ecs/Entity.hpp>
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 
 namespace con {
 bool Manifold::Check()

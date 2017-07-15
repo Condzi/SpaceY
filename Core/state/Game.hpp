@@ -29,7 +29,7 @@ Created by: Condzi
 class Game final
 {
 public:
-	Game( std::string settPath );
+	Game();
 	~Game();
 
 	template <typename T, typename... TArgs>
@@ -74,19 +74,20 @@ private:
 	sf::RenderWindow window;
 	EntityManager entityManager;
 	ResourceHolder resourceCache;
-	Settings settings;
+	Settings<SETTINGS_ENGINE> settingsEngine;
+	Settings<SETTINGS_GAME> settingsGame;
 	EntityFactory entityFactory;
 	StateStack stateStack;
 	Messenger messenger;
 	Context context;
 	std::vector<std::unique_ptr<System>> systems;
 	bool exit;
-	std::string settingsPath;
 
 	void pollEvents();
 	void update();
 
 	void assignContextPointers();
+	void loadSettings();
 	void configureFromSettings();
 	void registerDefaultStates();
 	void addDefaultSystems();

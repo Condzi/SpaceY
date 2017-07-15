@@ -12,7 +12,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 #include <Core/ecs/Component.hpp>
 
 namespace con {

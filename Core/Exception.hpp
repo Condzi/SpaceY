@@ -54,6 +54,15 @@ private:
 	const std::string file, function, condition, message;
 };
 
+class NotImplemented :
+	public BasicException
+{
+public:
+	NotImplemented( std::string wFile, std::string wFunction, uint32_t wLine, std::string wMessage ) :
+		BasicException( wFile, wFunction, wLine, "no condition", wMessage )
+	{}
+};
+
 inline void showBasicExceptionData( const BasicException& baseException )
 {
 	LOG( "File: " << baseException.File(), ERROR, BOTH );

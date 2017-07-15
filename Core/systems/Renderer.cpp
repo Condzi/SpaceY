@@ -41,7 +41,8 @@ std::vector<DrawableComponent*> Renderer::getDrawables()
 
 void Renderer::updateView()
 {
-	const Vec2i designed = { this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ), this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) };
+	//const Vec2i designed = { this->context.settings->GetInt( "WINDOW", "DESIGNED_X" ), this->context.settings->GetInt( "WINDOW", "DESIGNED_Y" ) };
+	const Vec2i designed( 1920, 1080 );
 	this->view = this->context.window->getDefaultView();
 	this->view.reset( { 0.0f,0.0f, (float)designed.x, (float)designed.y } );
 }

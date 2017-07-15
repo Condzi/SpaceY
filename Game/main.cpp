@@ -24,7 +24,7 @@ int main()
 		try
 		#endif // DEBUG
 		{
-			Game game( "settings.ini" );
+			Game game;
 			game.RegisterState<LoadingScreenState>( STATE_LOADING_SCREEN );
 			game.RegisterState<PlayConsoleState>( STATE_PLAY_CONSOLE );
 

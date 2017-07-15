@@ -6,7 +6,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 #include <Core/Config.hpp>
 #include <Core/Context.hpp>
 #include <Core/logger/Logger.hpp>

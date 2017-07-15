@@ -9,11 +9,10 @@
 #include <fstream>
 #include <iterator>
 
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 #include "INIFile.hpp"
 
 namespace con {
-namespace experimental {
 INIFile::record_t::record_t( std::string _section, std::string _name, std::string _value ) :
 	section( std::move( _section ) ),
 	name( std::move( _name ) ),
@@ -178,6 +177,5 @@ void INIFile::makeSerializeData( std::vector<std::string>& to )
 
 		to.push_back( record.name + " = " + record.value );
 	}
-}
 }
 }

@@ -7,7 +7,7 @@
 
 #include <Core/ecs/Entity.hpp>
 #include <Core/ecs/Config.hpp>
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 
 namespace con {
 // Forward declaration.

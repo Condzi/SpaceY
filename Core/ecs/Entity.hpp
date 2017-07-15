@@ -9,7 +9,7 @@
 #include <vector>
 
 #include <Core/ecs/Component.hpp>
-#include <Core/Assert.hpp>
+#include <Core/Macros.hpp>
 #include <Core/ecs/Functions.hpp>
 #include <Core/components/Script.hpp>
 

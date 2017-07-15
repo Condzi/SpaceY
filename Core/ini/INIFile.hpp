@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace con {
-namespace experimental {
+
 // TODO: Add comments.
 class INIFile final
 {
@@ -39,5 +39,4 @@ private:
 	std::string parseAsSection( const std::string& str );
 	void makeSerializeData( std::vector<std::string>& to );
 };
-}
 }

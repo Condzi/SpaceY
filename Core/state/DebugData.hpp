@@ -31,7 +31,7 @@ public:
 		return (stateID_t)coreStates_t::DEBUG_DATA;
 	}
 
-	void Update()
+	void Update() override
 	{
 		this->avgFPS.resize( this->avgFPS.size() + 1, Time::FRAME_TIME.AsSeconds() );
 

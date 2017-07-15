@@ -10,7 +10,7 @@
 #include <iterator>
 
 #include <Core/Macros.hpp>
-#include "INIFile.hpp"
+#include <Core/ini/INIFile.hpp>
 
 namespace con {
 INIFile::record_t::record_t( std::string _section, std::string _name, std::string _value ) :
@@ -54,7 +54,8 @@ bool INIFile::Save( const std::string& path, bool override )
 
 	std::experimental::filesystem::remove( path );
 	std::ofstream file( this->pathToFile );
-	std::copy( serializeData.begin(), serializeData.end(), std::ostream_iterator<std::string>( file, "\n" ) );
+	std::copy( serializeData.begin(), serializeData.end(),
+			   std::ostream_iterator<std::string>( file, "\n" ) );
 
 	return true;
 }
@@ -76,9 +77,9 @@ void INIFile::Parse()
 		tempString = str;
 		// Removing blank spaces before name and after value (   name = value   )
 		//													  ^^^            ^^^
-		while ( tempString.front() == ' ' )
+		while ( tempString.front() == ' ' || tempString.front() == '\t' )
 			tempString.erase( tempString.begin() );
-		while ( tempString.back() == ' ' )
+		while ( tempString.back() == ' ' || tempString.back() == '\t' )
 			tempString.pop_back();
 
 		if ( tempString.find_first_of( '=' ) == std::string::npos ) // If there is no '=' then parse as Section
@@ -89,9 +90,9 @@ void INIFile::Parse()
 
 			// Removing blank after before name and before value (name   =   value)
 			//														  ^^^ ^^^
-			while ( name.back() == ' ' )
+			while ( name.back() == ' ' || name.back() == '\t' )
 				name.pop_back();
-			while ( value.front() == ' ' )
+			while ( value.front() == ' ' || value.front() == '\t' )
 				value.erase( value.begin() );
 
 			this->parsedData.push_back( tempRecord );

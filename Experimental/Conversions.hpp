@@ -11,12 +11,15 @@
 
 #include <Core/Assert.hpp>
 
+// IDEA: Figure out how to disable or fix E0904, E0493 errors
+
 namespace con {
 namespace experimental {
 namespace conversions {
 
 namespace internal {
 
+	// TODO: Change enable_if to if constexpr
 	template <typename From>
 	std::enable_if_t<std::is_integral_v<From>, std::string>
 		inline ToStr( const From& src )
@@ -30,7 +33,6 @@ namespace internal {
 	{
 		return ( std::_Floating_to_string( "%f", src ) );
 	}
-
 }
 
 // If cast to string
@@ -49,11 +51,24 @@ inline To( const From& src )
 	return static_cast<To_>( src );
 }
 
-
 template <typename To_, typename From>
 inline To_ To( From* src )
 {
 	CON_STATIC_ASSERT( false, "this cast is not available" );
+}
+
+template<>
+inline int8_t To<int8_t, std::string>( const std::string& src )
+{
+	// No function that converts to char.
+	return To<int8_t>( std::stoi( src ) );
+}
+
+template<>
+inline uint8_t To<uint8_t, std::string>( const std::string& src )
+{
+	// No function that converts to unsigned char.
+	return To<uint8_t>( std::stoull( src ) );
 }
 
 template<>
@@ -108,6 +123,18 @@ inline double To<double, std::string>( const std::string& src )
 }
 
 // const char* alternatives 
+
+template<>
+inline int8_t To<int8_t, const char>( cstr_t src )
+{
+	return To<int8_t>( std::string( src ) );
+}
+
+template<>
+inline uint8_t To<uint8_t, const char>( cstr_t src )
+{
+	return To<uint8_t>( std::string( src ) );
+}
 
 template<>
 inline uint16_t To<uint16_t, const char>( cstr_t src )

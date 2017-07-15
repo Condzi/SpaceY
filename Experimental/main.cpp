@@ -7,7 +7,7 @@
 #include <array>
 
 #include "Settings.hpp"
-#include "Parser.hpp"
+#include "Conversions.hpp"
 
 using namespace con::experimental;
 
@@ -36,6 +36,6 @@ int main()
 
 	std::cout << conversions::To<std::string>( 123 ) << '\n';
 	std::cout << conversions::To<std::string>( 12.2 ) << '\n';
-	std::cout << conversions::To<float>( "150.254" ) << '\n';
+	std::cout << +conversions::To<uint8_t>( "150.254" ) << '\n';
 	std::cin.get();
 }

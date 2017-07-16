@@ -23,7 +23,7 @@ namespace internal {
 	std::enable_if_t<std::is_integral_v<From>, std::string>
 		inline ToStr( const From& src )
 	{
-		return ( std::_Integral_to_string<char>( src ) );
+		return ( std::_Integral_to_string<char>( +src ) );
 	}
 
 	template <typename From>

@@ -12,7 +12,7 @@
 namespace con {
 
 // Solution from Nexus's proposal: https://en.sfml-dev.org/forums/index.php?topic=7174
-inline sf::Vector2f getLocalSize( const sf::Text& text )
+inline Vec2f getCorrectTextBounds( const sf::Text& text )
 {
 	const sf::String str = text.getString() + '\n';
 
@@ -53,7 +53,7 @@ inline uint32_t findBestTextSize( const sf::Font& font, float height, int32_t fi
 
 	float highLineSpacing = font.getLineSpacing( *high );
 	if ( highLineSpacing == height )
-		return height;
+		return To<uint32_t>( height );
 
 	auto low = high - 1;
 	float lowLineSpacing = font.getLineSpacing( *low );

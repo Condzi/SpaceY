@@ -39,6 +39,8 @@ public:
 	void SetSize( const Vec2f& size );
 	void SetPosition( const Vec2f& relPos );
 	void SetScreenSize( const Vec2f& size );
+	void SetFlag( const flag_t flag, bool value );
+	void Move( const Vec2f& offset );
 
 	void Update();
 

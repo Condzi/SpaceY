@@ -55,6 +55,17 @@ void GUIWindow::SetScreenSize( const Vec2f& size )
 	this->positionsNeedsUpdate = true;
 }
 
+void GUIWindow::SetFlag( const flag_t flag, bool value )
+{
+	this->flags[flag] = value;
+}
+
+void GUIWindow::Move( const Vec2f& offset )
+{
+	this->relativePosition += offset;
+	this->positionsNeedsUpdate = true;
+}
+
 void GUIWindow::Update()
 {
 	if ( this->textNeedUpdate )
@@ -95,7 +106,11 @@ void GUIWindow::updatePositions()
 
 void GUIWindow::draw( sf::RenderTarget& target, sf::RenderStates states ) const
 {
-	target.draw( this->backgroundRect, states );
+	if ( this->flags[EXPANDED] )
+		target.draw( this->backgroundRect, states );
+	if ( this->flags[NO_TITLE_BAR] )
+		return;
+
 	target.draw( this->titleRect, states );
 	target.draw( this->titleText, states );
 }

@@ -10,6 +10,7 @@
 int main()
 {
 	sf::RenderWindow win( { 800,600 }, "" );
+	win.setFramerateLimit( 60 );
 	sf::Event ev;
 	sf::Font font;
 	font.loadFromFile( "consolas.ttf" );
@@ -23,11 +24,24 @@ int main()
 	guiWin2.SetSize( { 200, 100 } );
 	guiWin2.SetScreenSize( { 800,600 } );
 
+	guiWin.SetFlag( con::GUIWindow::EXPANDED, true );
+	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
+	guiWin2.SetFlag( con::GUIWindow::NO_TITLE_BAR, true );
+
 	while ( win.isOpen() ) {
 		while ( win.pollEvent( ev ) ) {
 			if ( ev.type == sf::Event::Closed )
 				win.close();
 		}
+
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::A ) )
+			guiWin.Move( { -0.1f, 0.f } );
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
+			guiWin.Move( { 0.1f, 0.f } );
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
+			guiWin.Move( { 0.f, 0.1f } );
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
+			guiWin.Move( { 0.f, -0.1f } );
 
 		guiWin.Update();
 		guiWin2.Update();

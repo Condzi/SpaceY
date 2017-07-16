@@ -134,7 +134,7 @@ inline Vec2<T> con::Vec2<T>::operator/( const Y value ) const
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator+=( const Vec2<Y>& second )
+inline Vec2<T>& con::Vec2<T>::operator+=( const Vec2<Y>& second )
 {
 	this->x += static_cast<T>( second.x ); this->y += static_cast<T>( second.y );
 	return *this;
@@ -142,7 +142,7 @@ inline Vec2<T> con::Vec2<T>::operator+=( const Vec2<Y>& second )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator-=( const Vec2<Y>& second )
+inline Vec2<T>& con::Vec2<T>::operator-=( const Vec2<Y>& second )
 {
 	this->x -= static_cast<T>( second.x ); this->y -= static_cast<T>( second.y );
 	return *this;
@@ -150,7 +150,7 @@ inline Vec2<T> con::Vec2<T>::operator-=( const Vec2<Y>& second )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator*=( const Vec2<Y>& second )
+inline Vec2<T>& con::Vec2<T>::operator*=( const Vec2<Y>& second )
 {
 	this->x *= static_cast<T>( second.x ); this->y *= static_cast<T>( second.y );
 	return *this;
@@ -158,7 +158,7 @@ inline Vec2<T> con::Vec2<T>::operator*=( const Vec2<Y>& second )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator/=( const Vec2<Y>& second )
+inline Vec2<T>& con::Vec2<T>::operator/=( const Vec2<Y>& second )
 {
 	this->x /= static_cast<T>( second.x ); this->y /= static_cast<T>( second.y );
 	return *this;
@@ -167,7 +167,7 @@ inline Vec2<T> con::Vec2<T>::operator/=( const Vec2<Y>& second )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator+=( const Y value )
+inline Vec2<T>& con::Vec2<T>::operator+=( const Y value )
 {
 	this->x += static_cast<T>( value ); this->y += static_cast<T>( value );
 	return *this;
@@ -175,7 +175,7 @@ inline Vec2<T> con::Vec2<T>::operator+=( const Y value )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator-=( const Y value )
+inline Vec2<T>& con::Vec2<T>::operator-=( const Y value )
 {
 	this->x -= static_cast<T>( value ); this->y -= static_cast<T>( value );
 	return *this;
@@ -183,7 +183,7 @@ inline Vec2<T> con::Vec2<T>::operator-=( const Y value )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator*=( const Y value )
+inline Vec2<T>& con::Vec2<T>::operator*=( const Y value )
 {
 	this->x *= static_cast<T>( value ); this->y *= static_cast<T>( value );
 	return *this;
@@ -191,7 +191,7 @@ inline Vec2<T> con::Vec2<T>::operator*=( const Y value )
 
 template<typename T>
 template<typename Y>
-inline Vec2<T> con::Vec2<T>::operator/=( const Y value )
+inline Vec2<T>& con::Vec2<T>::operator/=( const Y value )
 {
 	this->x /= static_cast<T>( value ); this->y /= static_cast<T>( value );
 	return *this;

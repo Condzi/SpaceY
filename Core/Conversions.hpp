@@ -18,7 +18,7 @@
 namespace con {
 namespace internal {
 
-	// TODO: Change enable_if to if constexpr
+	// TODO: Change enable_if to if constexpr, maybe make To<> constexpr?
 	template <typename From>
 	std::enable_if_t<std::is_integral_v<From>, std::string>
 		inline ToStr( const From& src )

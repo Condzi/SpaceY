@@ -107,22 +107,22 @@ struct Vec2
 	Vec2<T> operator/( const Y value ) const;
 
 	template <typename Y>
-	Vec2<T> operator+=( const Vec2<Y>& second );
+	Vec2<T>& operator+=( const Vec2<Y>& second );
 	template <typename Y>
-	Vec2<T> operator-=( const Vec2<Y>& second );
+	Vec2<T>& operator-=( const Vec2<Y>& second );
 	template <typename Y>
-	Vec2<T> operator*=( const Vec2<Y>& second );
+	Vec2<T>& operator*=( const Vec2<Y>& second );
 	template <typename Y>
-	Vec2<T> operator/=( const Vec2<Y>& second );
+	Vec2<T>& operator/=( const Vec2<Y>& second );
 
 	template <typename Y>
-	Vec2<T> operator+=( const Y value );
+	Vec2<T>& operator+=( const Y value );
 	template <typename Y>
-	Vec2<T> operator-=( const Y value );
+	Vec2<T>& operator-=( const Y value );
 	template <typename Y>
-	Vec2<T> operator*=( const Y value );
+	Vec2<T>& operator*=( const Y value );
 	template <typename Y>
-	Vec2<T> operator/=( const Y value );
+	Vec2<T>& operator/=( const Y value );
 
 	template <typename Y>
 	bool operator==( const Vec2<Y>& second ) const;

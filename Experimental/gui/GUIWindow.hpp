@@ -42,6 +42,9 @@ public:
 	void SetFlag( const flag_t flag, bool value );
 	void Move( const Vec2f& offset );
 
+	sf::FloatRect GetGlobalBounds() const;
+	sf::FloatRect GetTitleBarBounds() const;
+
 	void Update();
 
 private:

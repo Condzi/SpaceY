@@ -66,6 +66,16 @@ void GUIWindow::Move( const Vec2f& offset )
 	this->positionsNeedsUpdate = true;
 }
 
+sf::FloatRect GUIWindow::GetGlobalBounds() const
+{
+	return this->backgroundRect.getGlobalBounds();
+}
+
+sf::FloatRect GUIWindow::GetTitleBarBounds() const
+{
+	return this->titleRect.getGlobalBounds();
+}
+
 void GUIWindow::Update()
 {
 	if ( this->textNeedUpdate )

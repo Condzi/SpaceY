@@ -7,6 +7,10 @@
 #include "gui/GUIWindow.hpp"
 #include "gui/Color.hpp"
 
+#include <Core/logger/Logger.hpp>
+
+using con::Logger;
+
 int main()
 {
 	sf::RenderWindow win( { 800,600 }, "" );
@@ -28,20 +32,27 @@ int main()
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
 	guiWin2.SetFlag( con::GUIWindow::NO_TITLE_BAR, true );
 
+	con::Vec2f prevMousePos( sf::Mouse::getPosition( win ) );
+
 	while ( win.isOpen() ) {
 		while ( win.pollEvent( ev ) ) {
 			if ( ev.type == sf::Event::Closed )
 				win.close();
 		}
 
-		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::A ) )
-			guiWin.Move( { -0.1f, 0.f } );
-		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::D ) )
-			guiWin.Move( { 0.1f, 0.f } );
-		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::S ) )
-			guiWin.Move( { 0.f, 0.1f } );
-		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
-			guiWin.Move( { 0.f, -0.1f } );
+		auto mousePos = con::Vec2f( sf::Mouse::getPosition( win ) );
+		auto delta = prevMousePos - mousePos;
+		prevMousePos = mousePos;
+		if ( guiWin.GetTitleBarBounds().contains( mousePos.AsSFMLVec() ) &&
+			 sf::Mouse::isButtonPressed( sf::Mouse::Left ) ) {
+			con::Vec2f offset;
+			offset.Set( delta.x ? 1/(800 / delta.x) : 0, delta.y ? 1/(600 / delta.y) : 0 );
+			LOG( offset.AsString(), INFO, CONSOLE );
+			if ( offset.x == 1 || offset.y == 1 )
+				guiWin.Move( { 0,0 } );
+			// TODO: Figure out why this must be inverted
+			guiWin.Move( -offset );
+		}
 
 		guiWin.Update();
 		guiWin2.Update();

@@ -16,6 +16,8 @@
 // Conversion to SFML type vector.
 #include <SFML/System/Vector2.hpp>
 
+#include <Core/Conversions.hpp>
+
 namespace con {
 template <typename T>
 struct Vec2;
@@ -40,17 +42,22 @@ struct Vec2
 	{}
 	template <typename Y>
 	Vec2( Y xx, Y yy ) :
-		x( std::move( static_cast<T>( xx ) ) ),
-		y( std::move( static_cast<T>( yy ) ) )
+		x( std::move( To<T>( xx ) ) ),
+		y( std::move( To<T>( yy ) ) )
 	{}
 	template <typename Y>
 	Vec2( const Vec2<Y> second ) :
-		x( std::move( static_cast<T>( second.x ) ) ),
-		y( std::move( static_cast<T>( second.y ) ) )
+		x( std::move( To<T>( second.x ) ) ),
+		y( std::move( To<T>( second.y ) ) )
 	{}
 	Vec2( const sf::Vector2<T> second ) :
-		x( std::move( static_cast<T>( second.x ) ) ),
-		y( std::move( static_cast<T>( second.y ) ) )
+		x( std::move( To<T>( second.x ) ) ),
+		y( std::move( To<T>( second.y ) ) )
+	{}
+	template <typename Y>
+	Vec2( const sf::Vector2<Y> second ) :
+		x( std::move( To<T>( second.x ) ) ),
+		y( std::move( To<T>( second.y ) ) )
 	{}
 	// Making Vec2 polymorphic makes it bigger by 4 bytes. (polymorphic size: 12 bytes, non polymorphic - 8)
 #if !defined NO_POLYMORPHIC_VEC2
@@ -65,6 +72,11 @@ struct Vec2
 	{
 		*this = second;
 	}
+	void Set( const sf::Vector2<T>& second )
+	{
+		this->Set( second.x, second.y );
+	}
+	template <typename Y>
 	void Set( const sf::Vector2<T>& second )
 	{
 		this->Set( second.x, second.y );
@@ -136,6 +148,19 @@ struct Vec2
 	bool operator<=( const Vec2<Y>& second ) const;
 	template <typename Y>
 	bool operator>=( const Vec2<Y>& second ) const;
+
+	template <typename Y>
+	bool operator==( const Y value ) const;
+	template <typename Y>
+	bool operator!=( const Y value ) const;
+	template <typename Y>
+	bool operator<( const Y value ) const;
+	template <typename Y>
+	bool operator>( const Y value ) const;
+	template <typename Y>
+	bool operator<=( const Y value ) const;
+	template <typename Y>
+	bool operator>=( const Y value ) const;
 };
 
 template <typename T>

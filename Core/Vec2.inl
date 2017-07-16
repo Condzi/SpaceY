@@ -14,7 +14,7 @@ template <typename T>
 inline T Vec2<T>::Length() const
 {
 	// Calculate for nice precission, then cast if smaller is needed.
-	return static_cast<T>( std::sqrtf( this->x * this->x + this->y * this->y ) );
+	return To<T>( std::sqrtf( this->x * this->x + this->y * this->y ) );
 }
 
 template <typename T>
@@ -38,7 +38,7 @@ inline T con::Vec2<T>::Distance( const Vec2<T>& first, const Vec2<T>& second )
 template<typename T>
 inline Vec2<T> con::Vec2<T>::GetAbs() const
 {
-	return Vec2<T>( static_cast<T>( std::fabs( this->x ) ), static_cast<T>( std::fabs( this->y ) ) );
+	return Vec2<T>( To<T>( std::fabs( this->x ) ), To<T>( std::fabs( this->y ) ) );
 }
 
 template<typename T>
@@ -136,7 +136,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator+=( const Vec2<Y>& second )
 {
-	this->x += static_cast<T>( second.x ); this->y += static_cast<T>( second.y );
+	this->x += To<T>( second.x ); this->y += To<T>( second.y );
 	return *this;
 }
 
@@ -144,7 +144,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator-=( const Vec2<Y>& second )
 {
-	this->x -= static_cast<T>( second.x ); this->y -= static_cast<T>( second.y );
+	this->x -= To<T>( second.x ); this->y -= To<T>( second.y );
 	return *this;
 }
 
@@ -152,7 +152,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator*=( const Vec2<Y>& second )
 {
-	this->x *= static_cast<T>( second.x ); this->y *= static_cast<T>( second.y );
+	this->x *= To<T>( second.x ); this->y *= To<T>( second.y );
 	return *this;
 }
 
@@ -160,7 +160,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator/=( const Vec2<Y>& second )
 {
-	this->x /= static_cast<T>( second.x ); this->y /= static_cast<T>( second.y );
+	this->x /= To<T>( second.x ); this->y /= To<T>( second.y );
 	return *this;
 }
 
@@ -169,7 +169,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator+=( const Y value )
 {
-	this->x += static_cast<T>( value ); this->y += static_cast<T>( value );
+	this->x += To<T>( value ); this->y += To<T>( value );
 	return *this;
 }
 
@@ -177,7 +177,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator-=( const Y value )
 {
-	this->x -= static_cast<T>( value ); this->y -= static_cast<T>( value );
+	this->x -= To<T>( value ); this->y -= To<T>( value );
 	return *this;
 }
 
@@ -185,7 +185,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator*=( const Y value )
 {
-	this->x *= static_cast<T>( value ); this->y *= static_cast<T>( value );
+	this->x *= To<T>( value ); this->y *= To<T>( value );
 	return *this;
 }
 
@@ -193,7 +193,7 @@ template<typename T>
 template<typename Y>
 inline Vec2<T>& con::Vec2<T>::operator/=( const Y value )
 {
-	this->x /= static_cast<T>( value ); this->y /= static_cast<T>( value );
+	this->x /= To<T>( value ); this->y /= To<T>( value );
 	return *this;
 }
 
@@ -202,42 +202,84 @@ template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator==( const Vec2<Y>& second ) const
 {
-	return this->x == static_cast<T>( second.x ) && this->y == static_cast<T>( second.y );
+	return this->x == To<T>( second.x ) && this->y == To<T>( second.y );
 }
 
 template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator!=( const Vec2<Y>& second ) const
 {
-	return this->x != static_cast<T>( second.x ) && this->y != static_cast<T>( second.y );
+	return this->x != To<T>( second.x ) && this->y != To<T>( second.y );
 }
 
 template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator<( const Vec2<Y>& second ) const
 {
-	return this->x < static_cast<T>( second.x ) && this->y < static_cast<T>( second.y );
+	return this->x < To<T>( second.x ) && this->y < To<T>( second.y );
 }
 
 template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator>( const Vec2<Y>& second ) const
 {
-	return this->x > static_cast<T>( second.x ) && this->y > static_cast<T>( second.y );
+	return this->x > To<T>( second.x ) && this->y > To<T>( second.y );
 }
 
 template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator<=( const Vec2<Y>& second ) const
 {
-	return this->x <= static_cast<T>( second.x ) && this->y <= static_cast<T>( second.y );
+	return this->x <= To<T>( second.x ) && this->y <= To<T>( second.y );
 }
 
 template<typename T>
 template<typename Y>
 inline bool con::Vec2<T>::operator>=( const Vec2<Y>& second ) const
 {
-	return this->x >= static_cast<T>( second.x ) && this->y >= static_cast<T>( second.y );
+	return this->x >= To<T>( second.x ) && this->y >= To<T>( second.y );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator==( const Y value ) const
+{
+	return this->x == To<T>( value ) && this->y == To<T>( value );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator!=( const Y value ) const
+{
+	return this->x != To<T>( value ) && this->y != To<T>( value );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator<( const Y value ) const
+{
+	return this->x < To<T>( value ) && this->y < To<T>( value );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator>( const Y value ) const
+{
+	return this->x > To<T>( value ) && this->y > To<T>( value );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator<=( const Y value ) const
+{
+	return this->x <= To<T>( value ) && this->y <= To<T>( value );
+}
+
+template<typename T>
+template<typename Y>
+inline bool con::Vec2<T>::operator>=( const Y value ) const
+{
+	return this->x >= To<T>( value ) && this->y >= To<T>(value);
 }
 
 

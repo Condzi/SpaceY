@@ -4,8 +4,8 @@
 */
 
 #include <SFML/Graphics.hpp>
-#include "gui/Functions.hpp"
-
+#include "gui/GUIWindow.hpp"
+#include "gui/Color.hpp"
 
 int main()
 {
@@ -13,11 +13,15 @@ int main()
 	sf::Event ev;
 	sf::Font font;
 	font.loadFromFile( "consolas.ttf" );
-	sf::Text txt( "Hello, world!", font );
-	sf::RectangleShape shape( con::getLocalSize( txt ) );
-	txt.setPosition( 100, 100 );
-	shape.setPosition( 100, 100 );
-	shape.setFillColor( sf::Color::Red );
+	con::GUIWindow guiWin( { 0.5f, 0.5f }, "Very long title! 1234567890" );
+	guiWin.SetTitleFont( font );
+	guiWin.SetSize( { 200, 300 } );
+	guiWin.SetScreenSize( { 800,600 } );
+
+	con::GUIWindow guiWin2( { 0.1f, 0.3f }, "Short title" );
+	guiWin2.SetTitleFont( font );
+	guiWin2.SetSize( { 200, 100 } );
+	guiWin2.SetScreenSize( { 800,600 } );
 
 	while ( win.isOpen() ) {
 		while ( win.pollEvent( ev ) ) {
@@ -25,9 +29,12 @@ int main()
 				win.close();
 		}
 
+		guiWin.Update();
+		guiWin2.Update();
+
 		win.clear();
-		win.draw( shape );
-		win.draw( txt );
+		win.draw( guiWin );
+		win.draw( guiWin2 );
 		win.display();
 	}
 

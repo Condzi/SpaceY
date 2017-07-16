@@ -41,7 +41,7 @@ int main()
 		}
 
 		auto mousePos = con::Vec2f( sf::Mouse::getPosition( win ) );
-		auto delta = prevMousePos - mousePos;
+		auto delta = mousePos - prevMousePos;
 		prevMousePos = mousePos;
 		if ( guiWin.GetTitleBarBounds().contains( mousePos.AsSFMLVec() ) &&
 			 sf::Mouse::isButtonPressed( sf::Mouse::Left ) ) {
@@ -50,8 +50,8 @@ int main()
 			LOG( offset.AsString(), INFO, CONSOLE );
 			if ( offset.x == 1 || offset.y == 1 )
 				guiWin.Move( { 0,0 } );
-			// TODO: Figure out why this must be inverted
-			guiWin.Move( -offset );
+
+			guiWin.Move( offset );
 		}
 
 		guiWin.Update();

@@ -12,6 +12,7 @@
 #include <Core/Macros.hpp>
 #include <Core/ecs/Functions.hpp>
 #include <Core/components/Script.hpp>
+#include <Core/Conversions.hpp>
 
 namespace con {
 // Forward declaration.
@@ -21,7 +22,7 @@ class EntityManager;
 ===============================================================================
 Created by: Condzi
 	Main class of Entity Component System. To delete Entity use 'Kill' method.
-	If you want to deactivate Entity (if is inactive then Renderingand other systems
+	If you want to deactivate Entity (if is inactive then Rendering and other systems
 	won't update its state.
 
 ===============================================================================
@@ -29,117 +30,32 @@ Created by: Condzi
 class Entity final
 {
 public:
-	explicit Entity( EntityManager& manager ) :
-		alive( true ),
-		active( true ),
-		entityManager( &manager )
-	{}
+	explicit Entity( EntityManager& manager );
 
-	bool IsAlive() const
-	{
-		return this->alive;
-	}
-	void Kill()
-	{
-		if ( this->HasComponent<ScriptComponent>() )
-			this->GetComponent<ScriptComponent>().OnKill();
+	bool IsAlive() const;
+	bool IsActive() const;
+	const componentBitset_t& GetComponentBitset() const;
 
-		this->alive = false;
-	}
-	bool IsActive() const
-	{
-		return this->active;
-	}
-	void SetActive( bool val )
-	{
-		if ( val != this->active )
-			if ( !val ) {
-				if ( this->HasComponent<ScriptComponent>() )
-					this->GetComponent<ScriptComponent>().OnSleep();
-				else
-					if ( this->HasComponent<ScriptComponent>() )
-						this->GetComponent<ScriptComponent>().OnActive();
-			}
-
-		this->active = val;
-	}
+	void Kill();
+	void SetActive( bool val );
 
 	template <typename T>
-	bool HasComponent() const
-	{
-		CON_STATIC_ASSERT( std::is_base_of_v<Component, T>, "T must inherit from Component" );
-		return this->componentBitset[getComponentTypeID<T>()];
-	}
-
-	const componentBitset_t& GetComponentBitset() const
-	{
-		return this->componentBitset;
-	}
-
-	template <typename T, typename... TArgs>
-	T& AddComponent( TArgs&&... args )
-	{
-		CON_STATIC_ASSERT( std::is_base_of_v<Component, T>, "T must inherit from Component" );
-		CON_ASSERT( !this->HasComponent<T>(), "Entity already has component of id " + std::to_string( getComponentTypeID<T>() ) );
-
-		std::unique_ptr<Component> component = std::make_unique<T>( std::forward<TArgs>( args )... );
-		Component* rawPtr = component.get();
-
-		this->components.emplace_back( std::move( component ) );
-
-		this->componentArray[getComponentTypeID<T>()] = rawPtr;
-		this->componentBitset[getComponentTypeID<T>()] = true;
-
-		rawPtr->entity = this;
-		rawPtr->Init();
-		return *reinterpret_cast<T*>( rawPtr );
-	}
-
-	template <typename T, typename... TArgs>
-	T& AddScriptComponent( Context& context, TArgs&& ...args )
-	{
-		CON_STATIC_ASSERT( std::is_base_of_v<ScriptComponent, T>, "T must inherit from ScriptComponent" );
-		CON_ASSERT( !this->HasComponent<T>(), "Entity already has component of id " + std::to_string( getComponentTypeID<T>() ) );
-
-		std::unique_ptr<Component> component = std::make_unique<T>( std::forward<TArgs>( args )... );
-		Component* rawPtr = component.get();
-
-		this->components.emplace_back( std::move( component ) );
-
-		this->componentArray[getComponentTypeID<T>()] = rawPtr;
-		this->componentBitset[getComponentTypeID<T>()] = true;
-
-		rawPtr->entity = this;
-
-		reinterpret_cast<T*>( rawPtr )->context = context;
-		rawPtr->Init();
-		return *reinterpret_cast<T*>( rawPtr );
-	}
-
-
+	bool HasComponent() const;
 	template <typename T>
-	T& GetComponent() const
-	{
-		CON_ASSERT( this->HasComponent<T>(), "Entity doesn't have component of id " + std::to_string( +getComponentTypeID<T>() ) );
+	T& GetComponent() const;
 
-		auto ptr( this->componentArray[getComponentTypeID<T>()] );
-		return *reinterpret_cast<T*>( ptr );
-	}
+	template <typename T, typename... TArgs>
+	T& AddComponent( TArgs&&... args );
+	template <typename T, typename... TArgs>
+	T& AddScriptComponent( Context& context, TArgs&& ...args );
 
-	bool HasGroup( const groupID_t group ) const
-	{
-		return this->groupBitset[group];
-	}
-
+	bool HasGroup( const groupID_t group ) const;
 	void AddGroup( const groupID_t group );
-	void RemoveGroup( const groupID_t group )
-	{
-		this->groupBitset[group] = false;
-	}
+	void RemoveGroup( const groupID_t group );
 
 private:
-	bool alive;
-	bool active;
+	bool alive = true;
+	bool active = true;
 	componentArray_t componentArray;
 	componentBitset_t componentBitset;
 	groupBitset_t groupBitset;
@@ -147,4 +63,6 @@ private:
 	EntityManager* entityManager;
 
 };
+
+#include <Core/ecs/Entity.inl>
 }

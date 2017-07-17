@@ -76,6 +76,11 @@ sf::FloatRect GUIWindow::GetTitleBarBounds() const
 	return this->titleRect.getGlobalBounds();
 }
 
+bool GUIWindow::GetFlag( flag_t flag ) const
+{
+	return this->flags[flag];
+}
+
 void GUIWindow::Update()
 {
 	if ( this->textNeedUpdate )

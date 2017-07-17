@@ -45,6 +45,8 @@ int main()
 				win.close();
 		}
 
+		LOG( guiWin.GetFlag<con::GUIWindow::EXPANDED>(), INFO, CONSOLE );
+
 		auto mousePos = con::Vec2f( sf::Mouse::getPosition( win ) );
 		auto delta = mousePos - prevMousePos;
 		prevMousePos = mousePos;

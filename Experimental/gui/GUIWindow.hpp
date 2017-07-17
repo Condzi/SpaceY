@@ -44,6 +44,13 @@ public:
 
 	sf::FloatRect GetGlobalBounds() const;
 	sf::FloatRect GetTitleBarBounds() const;
+	bool GetFlag( flag_t flag ) const;
+	// this is interesting 
+	template<flag_t flag>
+	bool GetFlag() const
+	{
+		return this->flags[flag];
+	}
 
 	void Update();
 

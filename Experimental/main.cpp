@@ -29,6 +29,7 @@ int main()
 	guiWin2.SetScreenSize( { 800,600 } );
 
 	guiWin.SetFlag( con::GUIWindow::EXPANDED, true );
+	LOG( guiWin.GetFlag<con::GUIWindow::EXPANDED>(), INFO, CONSOLE );
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
 	
@@ -45,7 +46,6 @@ int main()
 				win.close();
 		}
 
-		LOG( guiWin.GetFlag<con::GUIWindow::EXPANDED>(), INFO, CONSOLE );
 
 		auto mousePos = con::Vec2f( sf::Mouse::getPosition( win ) );
 		auto delta = mousePos - prevMousePos;

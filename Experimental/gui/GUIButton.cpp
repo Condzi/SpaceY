@@ -17,6 +17,8 @@ GUIButton::GUIButton( Vec2f relPos, std::string title ) :
 	// TODO: Add this values to default engine settings in UI section
 	this->shape.setFillColor( { 37,37,37 } );
 	this->text.setFillColor( { 241, 241, 241 } );
+	this->shape.setOutlineColor( { 79, 39, 129 } );
+	this->shape.setOutlineThickness( 2.5f );
 }
 
 void GUIButton::SetText( const std::string& title )

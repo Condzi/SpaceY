@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "gui/GUIWindow.hpp"
-#include "gui/Color.hpp"
+#include "gui/GUIButton.hpp"
 
 #include <Core/logger/Logger.hpp>
 
@@ -30,7 +30,12 @@ int main()
 
 	guiWin.SetFlag( con::GUIWindow::EXPANDED, true );
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
-	guiWin2.SetFlag( con::GUIWindow::NO_TITLE_BAR, true );
+	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
+	
+	con::GUIButton button( { 0.3,0.3 }, "Click me" );
+	button.SetTextFont( font );
+	button.SetSize( { 0,50 } );
+	button.SetScreenSize( { 800,600 } );
 
 	con::Vec2f prevMousePos( sf::Mouse::getPosition( win ) );
 
@@ -56,10 +61,12 @@ int main()
 
 		guiWin.Update();
 		guiWin2.Update();
+		button.Update();
 
 		win.clear();
 		win.draw( guiWin );
 		win.draw( guiWin2 );
+		win.draw( button );
 		win.display();
 	}
 

@@ -8,6 +8,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 #include <Core/Conversions.hpp>
+#include <Core/Vec2.hpp>
 
 namespace con {
 
@@ -34,7 +35,7 @@ inline Vec2f getCorrectTextBounds( const sf::Text& text )
 }
 
 // From texus's TGUI
-inline uint32_t findBestTextSize( const sf::Font& font, float height, int32_t fit )
+inline uint32_t findBestTextSize( const sf::Font& font, float height, int32_t fit = 0 )
 {
 	if ( height < 2 )
 		return 1;

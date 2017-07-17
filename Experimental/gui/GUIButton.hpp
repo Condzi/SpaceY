@@ -16,53 +16,43 @@
 
 namespace con {
 
-class GUIWindow final :
+class GUIButton final : 
 	public sf::Drawable
 {
-	// Size of the title bar in pixels, never changes.
-	static constexpr float SIZE_TITLEBAR_Y = 20;
-	static constexpr float SIZE_TITLEBAR_CHARACTER_SIZE = 16;
-
 public:
-	using Flags = std::bitset<3>;
+	using Flags = std::bitset<1>;
 	enum flag_t : uint8_t
 	{
-		NO_TITLE_BAR,
-		GRABABLE,
-		EXPANDED
+		SELECTED,
+		CLICKED
 	};
 
-	GUIWindow( Vec2f relPos, std::string title );
+	GUIButton( Vec2f relPos, std::string title );
 
-	void SetTitleText( const std::string& text );
-	void SetTitleFont( const sf::Font& font );
+	void SetText( const std::string& title );
+	void SetTextFont( const sf::Font& font );
 	void SetSize( const Vec2f& size );
 	void SetPosition( const Vec2f& relPos );
 	void SetScreenSize( const Vec2f& size );
 	void SetFlag( const flag_t flag, bool value );
 	void Move( const Vec2f& offset );
-
+	
 	sf::FloatRect GetGlobalBounds() const;
-	sf::FloatRect GetTitleBarBounds() const;
-
+	
 	void Update();
 
 private:
-	// 0.0 - 1.0, from top-left corner of the screen
 	Vec2f relativePosition;
 	Vec2f screenSize;
 	Flags flags;
 	bool textNeedUpdate = true;
 	bool positionsNeedsUpdate = true;
 
-	sf::RectangleShape backgroundRect;
-	sf::RectangleShape titleRect;
-	sf::Text titleText;
-	std::string titleString;
+	sf::RectangleShape shape;
+	sf::Text text;
 
 	void updateText();
 	void updatePositions();
 	void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
 };
-
 }

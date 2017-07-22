@@ -6,90 +6,192 @@
 #pragma once
 
 #include <algorithm>
-#include <type_traits>
+#include <functional>
 #include <string>
 #include <cinttypes>
-#include <cctype>
 
 #include <Core/Macros.hpp>
+#include <Core/Config.hpp>
+
+// IDEA: Figure out how to disable or fix E0904, E0493 errors
 
 namespace con {
-
-template <typename TypeA, typename TypeB>
-constexpr bool IsSameType = std::is_same<TypeA, TypeB>::value;
-
-template <typename TO, typename From>
-inline TO To( const From& src );
-
 namespace internal {
+
+	// TODO: Change enable_if to if constexpr
 	template <typename From>
-	inline std::string ToStr( const From& src )
+	std::enable_if_t<std::is_integral_v<From>, std::string>
+		inline ToStr( const From& src )
 	{
-		if constexpr ( IsSameType<bool, From> )
-			return src != 0 ? "true" : "false";
-		else if constexpr ( std::is_integral_v<From> || std::is_floating_point_v<From> )
-			return std::to_string( +src );
-		else
-			CON_STATIC_ASSERT( false, "invalid to string conversion parameters" );
+		return ( std::_Integral_to_string<char>( src ) );
 	}
 
-	inline std::string ToLower( std::string str )
+	template <typename From>
+	std::enable_if_t<std::is_floating_point_v<From>, std::string>
+		inline ToStr( const From& src )
 	{
-		std::transform( str.begin(), str.end(), str.begin(), ::tolower );
-		return str;
-	}
-
-	template <typename TO>
-	inline TO FromStr( const std::string& src )
-	{
-		if constexpr ( IsSameType<int8_t, TO> )
-			return To<int8_t>( std::stoi( src ) );
-		else if constexpr ( IsSameType<uint8_t, TO> )
-			return To<uint8_t>( std::stoull( src ) );
-		else if constexpr ( IsSameType<int16_t, TO> )
-			return To<int16_t>( std::stoi( src ) );
-		else if constexpr ( IsSameType<uint16_t, TO> )
-			return To<uint16_t>( std::stoull( src ) );
-		else if constexpr ( IsSameType<int32_t, TO> )
-			return std::stoi( src );
-		else if constexpr ( IsSameType<uint32_t, TO> )
-			return To<uint32_t>( std::stoull( src ) );
-		else if constexpr ( IsSameType<int64_t, TO> )
-			return std::stoll( src );
-		else if constexpr ( IsSameType<uint64_t, TO> )
-			return std::stoull( src );
-		else if constexpr ( IsSameType<float, TO> )
-			return std::stof( src );
-		else if constexpr ( IsSameType<double, TO> )
-			return std::stod( src );
-		else if constexpr ( IsSameType<bool, TO> )
-			return !( ToLower( src ) == "false" || ToLower( src ) == "0" );
-		else
-			CON_STATIC_ASSERT( false, "invalid from string conversion parameter" );
+		return ( std::_Floating_to_string( "%f", src ) );
 	}
 }
 
-template <typename TO, typename From>
-inline TO To( const From& src )
+// If cast to string
+template <typename To_, typename From>
+std::enable_if_t<std::is_same_v<std::string, To_>, To_>
+inline To( const From& src )
 {
-	if constexpr ( IsSameType<void, TO> ||
-				   IsSameType<void, From> )
-		CON_STATIC_ASSERT( false, "invalid conversion argument <void>" );
-
-	if constexpr( IsSameType<std::string, From> )
-		return internal::FromStr<TO>( std::string( src ) );
-	else if constexpr ( IsSameType<std::string, TO> )
-		return internal::ToStr( src );
-	else
-		return static_cast<TO>( src );
+	return internal::ToStr<From>( src );
 }
 
-template <typename TO, typename From>
-inline TO To( From* src )
+// If not cast to string
+template <typename To_, typename From>
+std::enable_if_t<!std::is_same_v<std::string, To_>, To_>
+inline To( const From& src )
 {
-	if constexpr ( IsSameType<const char, From> )
-		return internal::FromStr<TO>( std::string( src ) );
-	else
-		CON_STATIC_ASSERT( false, "invalid conversion argument <poitner>" );
+	return static_cast<To_>( src );
+}
+
+template <typename To_, typename From>
+inline To_ To( From* src )
+{
+	//CON_STATIC_ASSERT( false, "this cast is not available" );
+}
+
+template<>
+inline int8_t To<int8_t, std::string>( const std::string& src )
+{
+	// No function that converts to char.
+	return To<int8_t>( std::stoi( src ) );
+}
+
+template<>
+inline uint8_t To<uint8_t, std::string>( const std::string& src )
+{
+	// No function that converts to unsigned char.
+	return To<uint8_t>( std::stoull( src ) );
+}
+
+template<>
+inline int16_t To<int16_t, std::string>( const std::string& src )
+{
+	// No function that converts to short.
+	return To<int16_t>( std::stoi( src ) );
+}
+
+template<>
+inline uint16_t To<uint16_t, std::string>( const std::string& src )
+{
+	// No function that converts to unsigned short or unsigned int.
+	return To<uint16_t>( std::stoull( src ) );
+}
+
+template<>
+inline int32_t To<int32_t, std::string>( const std::string& src )
+{
+	return std::stoi( src );
+}
+
+template<>
+inline uint32_t To<uint32_t, std::string>( const std::string& src )
+{
+	// No function that converts to unsigned int.
+	return To<uint32_t>( std::stoull( src ) );
+}
+
+template<>
+inline int64_t To<int64_t, std::string>( const std::string& src )
+{
+	return std::stoll( src );
+}
+
+template<>
+inline uint64_t To<uint64_t, std::string>( const std::string& src )
+{
+	return std::stoull( src );
+}
+
+template<>
+inline float To<float, std::string>( const std::string& src )
+{
+	return std::stof( src );
+}
+
+template<>
+inline double To<double, std::string>( const std::string& src )
+{
+	return std::stod( src );
+}
+
+template<>
+inline bool To<bool, std::string>( const std::string& src )
+{
+	std::string copy = src;
+	std::transform( copy.begin(), copy.end(), copy.begin(), ::tolower );
+
+	if ( copy == "false" || copy == "0" )
+		return false;
+
+	return true;
+}
+
+// const char* alternatives 
+
+template<>
+inline int8_t To<int8_t, const char>( cstr_t src )
+{
+	return To<int8_t>( std::string( src ) );
+}
+
+template<>
+inline uint8_t To<uint8_t, const char>( cstr_t src )
+{
+	return To<uint8_t>( std::string( src ) );
+}
+
+template<>
+inline uint16_t To<uint16_t, const char>( cstr_t src )
+{
+	return To<uint16_t>( std::string( src ) );
+}
+
+template<>
+inline int32_t To<int32_t, const char>( cstr_t src )
+{
+	return To<int32_t>( std::string( src ) );
+}
+
+template<>
+inline uint32_t To<uint32_t, const char>( cstr_t src )
+{
+	return To<uint32_t>( std::string( src ) );
+}
+
+template<>
+inline int64_t To<int64_t, const char>( cstr_t src )
+{
+	return To<int64_t>( std::string( src ) );
+}
+
+template<>
+inline uint64_t To<uint64_t, const char>( cstr_t src )
+{
+	return To<uint64_t>( std::string( src ) );
+}
+
+template<>
+inline float To<float, const char>( cstr_t src )
+{
+	return To<float>( std::string( src ) );
+}
+
+template<>
+inline double To<double, const char>( cstr_t src )
+{
+	return To<double>( std::string( src ) );
+}
+
+template<>
+inline bool To<bool, const char>( cstr_t src )
+{
+	return To<bool>( std::string( src ) );
 }
 }

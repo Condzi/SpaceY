@@ -8,7 +8,7 @@
 #include <Core/Config.hpp>
 
 namespace con {
-sf::FloatRect con::getRealTextBounds( const sf::Text& text )
+sf::FloatRect getRealTextBounds( const sf::Text& text )
 {
 	return sf::FloatRect(
 		text.getPosition().x + ( text.getCharacterSize() * 3 ) / 50.0f,

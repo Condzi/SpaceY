@@ -37,7 +37,7 @@ class Time final
 public:
 	static Time FRAME_TIME;
 
-	Time::Time( int64_t microseconds = 0 ) :
+	Time( int64_t microseconds = 0 ) :
 		microseconds( std::move( microseconds ) )
 	{}
 
@@ -56,6 +56,10 @@ protected:
 	// 1 millisecond - 1 000 microseconds
 	int64_t microseconds;
 };
-;
+
+Time asSeconds( const float val );
+Time asMilliseconds( const int32_t val );
+Time asMicroseconds( const int64_t& val );
+void SleepFor( const Time& time );
 }
 

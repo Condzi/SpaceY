@@ -24,9 +24,9 @@ class State
 {
 public:
 	State( StateStack& stack, Context cont ) :
-		stateStack( stack ),
 		context( std::move( cont ) ),
-		threadRunning( false )
+		threadRunning( false ),
+		stateStack( stack )
 	{}
 	virtual ~State()
 	{

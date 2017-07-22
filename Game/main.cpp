@@ -31,7 +31,7 @@ int main()
 			game.Run( STATE_LOADING_SCREEN );
 		}
 	#if !defined DEBUG
-		catch ( BaseException& baseException ) {
+		catch ( BasicException& baseException ) {
 			LOG( "Base Exception (assert) thrown.", ERROR, BOTH );
 			showBasicExceptionData( baseException );
 			exitProperly = false;

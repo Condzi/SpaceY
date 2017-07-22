@@ -17,7 +17,7 @@ namespace con {
 struct PlayConsoleStateGameMaster final :
 	ScriptComponent
 {
-	void Init()
+	void Init() override
 	{
 		this->context.messenger->AddMessage( MESSAGE_CONSOLE_ADD_LOG, consoleMessage_t( "+=+=+= FALCON 1 STARTUP =+=+=+" ) );
 	}

@@ -90,16 +90,16 @@ void Game::assignContextPointers()
 void Game::loadSettings()
 {
 	this->settingsEngine.Load( PATH_ENGINE_SETTINGS );
-	if ( !this->settingsEngine.DoesMatchWithDefault() ) {
+/*	if ( !this->settingsEngine.DoesMatchWithDefault() ) {
 		LOG( "Generating default engine settings", INFO, CONSOLE );
 		this->settingsEngine.CreateDefault();
-	}
+	}*/
 
 	this->settingsGame.Load( PATH_GAME_SETTINGS );
-	if ( !this->settingsGame.DoesMatchWithDefault() ) {
-		LOG( "Generating default game settings", INFO, CONSOLE );
-		this->settingsGame.CreateDefault();
-	}
+	//if ( !this->settingsGame.DoesMatchWithDefault() ) {
+	//	LOG( "Generating default game settings", INFO, CONSOLE );
+	//	this->settingsGame.CreateDefault();
+	//}
 }
 
 void Game::configureFromSettings()

@@ -61,52 +61,19 @@ class Messenger final
 {
 public:
 	template <typename T>
-	Message<T>* AddMessage( const messageID_t id, const T& data )
-	{
-		this->messages.emplace_back( std::make_unique<Message<T>>( id, data, this->messages.size() ) );
-		return reinterpret_cast<Message<T>*>( this->messages.back().get() );
-
-	}
+	Message<T>* AddMessage( messageID_t id, const T& data );
 	template <typename T>
-	Message<T>* GetUniqueMessage( const messageID_t id )
-	{
-		auto result = this->findMessage( id );
-		if ( result != this->messages.end() )
-			return reinterpret_cast<Message<T>*>( ( *result ).get() );
-
-		return nullptr;
-	}
+	Message<T>* GetUniqueMessage( messageID_t id );
 	template <typename T>
-	std::vector<Message<T>*> GetAllMessages( const messageID_t id )
-	{
-		std::vector<Message<T>*> vec;
-		vec.reserve( this->messages.size() );
+	std::vector<Message<T>*> GetAllMessages( const messageID_t id );
 
-		for ( auto& message : this->messages )
-			if ( message && message->id == id )
-				vec.push_back( reinterpret_cast<Message<T>*>( ( message.get() ) ) );
-
-		return vec;
-	}
-
-	void ClearMessages()
-	{
-		this->messages.erase( std::remove_if( this->messages.begin(), this->messages.end(), []( auto& msg )
-		{
-			return ( !msg ) || msg->safeDelete;
-		} ), this->messages.end() );
-	}
+	void ClearMessages();
 
 private:
 	std::vector<std::unique_ptr<internal::messageInterface_t>> messages;
 
-	auto findMessage( const messageID_t id ) const
-	{
-		return std::find_if( this->messages.begin(), this->messages.end(),
-							 [id]( auto& ptr )
-		{
-			return ptr->id == id;
-		} );
-	}
+	std::vector<std::unique_ptr<internal::messageInterface_t>>::const_iterator findMessage( messageID_t id ) const;
 };
+
+#include <Core/ecs/Messaging.inl>
 }

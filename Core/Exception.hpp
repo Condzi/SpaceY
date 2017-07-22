@@ -22,8 +22,8 @@ class BasicException
 {
 public:
 	BasicException( std::string wFile, std::string wFunction, uint32_t wLine, std::string wCondition, std::string wMessage ) :
-		file( std::move( wFile ) ), function( std::move( wFunction ) ), condition( std::move( wCondition ) ), message( std::move( wMessage ) ),
-		line( std::move( wLine ) )
+		line( std::move( wLine ) ),
+		file( std::move( wFile ) ), function( std::move( wFunction ) ), condition( std::move( wCondition ) ), message( std::move( wMessage ) )
 	{}
 	virtual ~BasicException() = default;
 	BasicException operator=( const BasicException& ) = delete;

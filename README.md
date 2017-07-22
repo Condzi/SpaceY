@@ -6,4 +6,4 @@ You goal is to not bankrupt.
 * C++17
 * ConEngine (see my Repos)
 
-I'm programming on Win7 using Visual Studio 2017.
+I'm programming on Win7 using Visual Studio 2017 and clang 3.8.

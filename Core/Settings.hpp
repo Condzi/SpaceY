@@ -25,25 +25,37 @@ enum settings_t : settingsID_t
 	SETTINGS_GAME
 };
 
-#define BEGIN_SETTINGS_DEF \
-	static constexpr std::array<constexprRecord_t, MAX_SETTINGS_RECORDS> records = {
+template <settingsID_t>
+struct Settings;
 
-#define DEFINE_SETTING( SECTION, NAME, VALUE ) constexprRecord_t( SECTION, NAME, VALUE )
-
-#define END_SETTINGS_DEF }; \
-static constexpr constexprString_t Get( const constexprString_t& section, const constexprString_t& name ) \
+// FIXME plz :c
+// IMPORTANT: Add constexpr here in C++17
+#define SETTING_STRUCTURE_DEF( settingsID ) \ 
+template<> \
+struct Settings<settingsID> final \
 { \
-	auto result = constexprFindIf( \
-		Settings<SETTINGS_DEFAULT_ENGINE>::records.begin(), \
-		Settings<SETTINGS_DEFAULT_ENGINE>::records.end(), \
-		[section, name]( const constexprRecord_t& record ) \
+	static const std::array<constexprRecord_t, MAX_SETTINGS_RECORDS> records; \
+		\
+		static const constexprString_t Get( const constexprString_t& section, const constexprString_t& name ) \
 	{ \
-		return ( section == record.section ) && ( name == record.name ); \
+		auto result = constexprFindIf( \
+									   Settings<settingsID>::records.begin(), \
+									   Settings<settingsID>::records.end(), \
+									   [section, name]( const constexprRecord_t& record ) \
+	{ \
+									   return ( section == record.section ) && ( name == record.name ); \
 	} ); \
-	if ( result == Settings<SETTINGS_DEFAULT_ENGINE>::records.end() ) \
-		return constexprString_t( "" ); \
-	return result->value; \
+		if ( result == Settings<settingsID>::records.end() ) \
+			return constexprString_t( "" ); \
+			return result->value; \
+	} \
 }
+
+#define BEGIN_SETTINGS_CONTENT_DEF(settingsID) \
+	const std::array<constexprRecord_t, MAX_SETTINGS_RECORDS> Settings<settingsID>::records = {
+#define SETTING_DEF( SECTION, NAME, VALUE ) constexprRecord_t( SECTION, NAME, VALUE )
+
+#define END_SETTINGS_CONTENT_DEF() } 
 
 namespace internal
 {
@@ -109,23 +121,8 @@ struct Settings final :
 	internal::SettingsInterface
 {};
 
-template <>
-struct Settings<SETTINGS_DEFAULT_ENGINE> final
-{
-	BEGIN_SETTINGS_DEF
-
-		DEFINE_SETTING( "WINDOW", "FPS", "60" ),
-		DEFINE_SETTING( "WINDOW", "SIZE_X", "1280" ),
-		DEFINE_SETTING( "WINDOW", "SIZE_Y", "720" ),
-
-		DEFINE_SETTING( "AUDIO", "MASTER_VOLUME", "100" ),
-		DEFINE_SETTING( "AUDIO", "MUSIC_VOLUME", "100" ),
-		DEFINE_SETTING( "AUDIO", "SOUND_VOLUME", "100" ),
-
-		DEFINE_SETTING( "PHYSIC", "UPS", "60" )
-
-		END_SETTINGS_DEF
-};
+SETTING_STRUCTURE_DEF( SETTINGS_DEFAULT_ENGINE );
+SETTING_STRUCTURE_DEF( SETTINGS_DEFAULT_GAME );
 
 // Redundancy SETTINGS_ENGINE and SETTINGS_GAME...
 template<>
@@ -159,17 +156,6 @@ struct Settings<SETTINGS_ENGINE> final :
 
 private:
 	INIFile file;
-};
-
-template <>
-struct Settings<SETTINGS_DEFAULT_GAME> final
-{
-	BEGIN_SETTINGS_DEF
-
-		DEFINE_SETTING( "DEFAULT", "NAME", "SpaceY" ),
-		//...
-
-		END_SETTINGS_DEF
 };
 
 template<>

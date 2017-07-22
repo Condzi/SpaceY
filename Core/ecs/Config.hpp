@@ -16,13 +16,13 @@ struct Component;
 constexpr size_t MAX_COMPONENTS = 64;
 constexpr size_t MAX_GROUPS = 32;
 
-typedef std::bitset<MAX_COMPONENTS> componentBitset_t;
-typedef std::array<Component*, MAX_COMPONENTS> componentArray_t;
-typedef std::bitset<MAX_GROUPS> groupBitset_t;
-typedef size_t componentID_t;
-typedef uint8_t systemID_t;
-typedef uint8_t entityID_t;
-typedef uint8_t groupID_t;
+using componentBitset_t = std::bitset<MAX_COMPONENTS>;
+using componentArray_t = std::array<Component*, MAX_COMPONENTS>;
+using groupBitset_t = std::bitset<MAX_GROUPS>;
+using componentID_t = size_t;
+using systemID_t = uint8_t;
+using entityID_t = uint8_t;
+using groupID_t = uint8_t;
 
-typedef int8_t messageID_t;
+using messageID_t = int8_t;
 }

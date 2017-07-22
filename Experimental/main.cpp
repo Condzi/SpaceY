@@ -33,7 +33,7 @@ int main()
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
 	guiWin2.SetFlag( con::GUIWindow::EXPANDED, true );
 	
-	con::GUIButton button( { 0.3,0.3 }, "Click me" );
+	con::GUIButton button( { 0.4,0.1 }, "Click me!" );
 	button.SetTextFont( font );
 	button.SetSize( { 0,50 } );
 	button.SetScreenSize( { 800,600 } );

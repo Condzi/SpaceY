@@ -7,7 +7,7 @@
 
 namespace con {
 
-Entity::Entity( EntityManager & manager ) :
+Entity::Entity( EntityManager& manager ) :
 	entityManager( &manager )
 {}
 

@@ -95,14 +95,14 @@ void GUIButton::updatePositions()
 	this->shape.setPosition( realPosition.AsSFMLVec() );
 	auto offset = this->text.getFont()->getLineSpacing( this->text.getCharacterSize() ) / 10;
 
-	this->text.setPosition( realPosition.x, realPosition.y -  offset );
+	this->text.setPosition( realPosition.x, realPosition.y - offset );
 
 	this->positionsNeedsUpdate = false;
-	}
+}
 
-		void GUIButton::draw( sf::RenderTarget& target, sf::RenderStates states ) const
-	{
-		target.draw( this->shape, states );
-		target.draw( this->text, states );
-	}
+void GUIButton::draw( sf::RenderTarget& target, sf::RenderStates states ) const
+{
+	target.draw( this->shape, states );
+	target.draw( this->text, states );
+}
 }
